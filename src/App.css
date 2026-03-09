@@ -25,19 +25,22 @@
   min-width: 400px;
 }
 
-
-/* 📱 THE MOBILE MAGIC: When the screen gets smaller than an iPad (768px)... */
+/* 📱 THE MOBILE MAGIC: When the screen gets smaller than an iPad... */
 @media (max-width: 768px) {
   .dashboard-container {
-    flex-direction: column; /* ...stack them vertically! */
-    padding: 0 10px 10px 10px !important;
+    flex-direction: column; 
+    padding: 0 5px 10px 5px !important; /* Gives the screen edges a little breathing room */
   }
   
   .inventory-section {
-    min-width: 100%; /* Stop the inventory from overflowing the screen */
+    min-width: 100%; 
   }
 
   .map-section {
-    min-height: 300px; /* Shrink the map slightly on phones to save space */
+    flex: none; /* Stops the iPhone from squishing the map */
+    height: 400px; /* Forces the map to be exactly this tall */
+    min-height: 400px;
+    width: 100%;
+    margin-bottom: 15px; /* Adds space between map and inventory */
   }
 }
