@@ -7,7 +7,7 @@ const API_URL = 'https://heavenly-server-xgc4.onrender.com';
 
 const fixImageUrl = (url) => {
   if (!url || typeof url !== 'string') return '';
-  return url.replace('http://localhost:3000', API_URL).replace('localhost', 'heavenly-server-xgc4.onrender.com');
+  return url.replace('heavenly-frontend-m76p24irf-danielrod221s-projects.vercel.app', API_URL).replace('localhost', 'heavenly-server-xgc4.onrender.com');
 };
 
 const bgImageUrl = 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2560&auto=format&fit=crop';
@@ -175,7 +175,6 @@ function App() {
   const [counteringOfferId, setCounteringOfferId] = useState(null);
   const [counterAmount, setCounterAmount] = useState('');
 
-  // FRACTIONAL INVENTORY STATES
   const [buyQty, setBuyQty] = useState({}); 
   const [newPalletsAvailable, setNewPalletsAvailable] = useState('');
   const [newBoxesPerPallet, setNewBoxesPerPallet] = useState('');
@@ -796,8 +795,8 @@ function App() {
         <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#020617' }}>
           <Navbar title="Command Center" role={role} view={view} setView={setView} handleLogout={handleLogout} token={token} />
           
-          <div style={{ flex: 1, padding: '0 20px 20px 20px', display: 'flex', gap: '20px', overflow: 'hidden' }}>
-            <div style={{ flex: 2, backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.6), rgba(15, 23, 42, 0.8)), url('${satelliteMapUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '12px', border: '2px solid #1e293b', position: 'relative', overflow: 'hidden', boxShadow: 'inset 0 0 100px rgba(56, 189, 248, 0.4)' }}>
+          <div className="dashboard-container" style={{ flex: 1, padding: '0 20px 20px 20px', overflow: 'hidden' }}>
+            <div className="map-section" style={{ backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.6), rgba(15, 23, 42, 0.8)), url('${satelliteMapUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '12px', border: '2px solid #1e293b', position: 'relative', overflow: 'hidden', boxShadow: 'inset 0 0 100px rgba(56, 189, 248, 0.4)' }}>
               <div style={{ position: 'absolute', top: '50%', left: '50%', width: '200%', height: '200%', background: 'conic-gradient(from 0deg, transparent 70%, rgba(56, 189, 248, 0.3) 100%)', transform: 'translate(-50%, -50%)', borderRadius: '50%', animation: 'spin 4s linear infinite', pointerEvents: 'none', zIndex: 1000 }} />
               <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(15,23,42,0.85)', padding: '15px', borderRadius: '8px', border: '1px solid #334155', color: '#f8fafc', zIndex: 2000, boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
                 <h3 style={{ margin: 0, fontSize: '14px', color: '#38bdf8', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%', boxShadow: '0 0 10px #4ade80' }}></span>LIVE SATELLITE GRID</h3>
@@ -823,7 +822,7 @@ function App() {
               </MapContainer>
             </div>
 
-            <div style={{ flex: 1, minWidth: '400px', maxWidth: '450px', background: 'rgba(15, 23, 42, 0.6)', border: '1px solid #1e293b', borderRadius: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+            <div className="inventory-section" style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid #1e293b', borderRadius: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
               <div style={{ padding: '20px', borderBottom: '1px solid #1e293b', background: '#0f172a' }}>
                 <h3 style={{ margin: 0, color: 'white', fontSize: '18px' }}>{selectedMapLocation ? `Inventory at Location` : 'All Available Inventory'}</h3>
                 <p style={{ margin: '5px 0 0 0', color: '#94a3b8', fontSize: '13px' }}>{displayedPallets.length} Pallets Found</p>
