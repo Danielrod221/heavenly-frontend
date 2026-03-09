@@ -3,11 +3,11 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const API_URL = `http://${window.location.hostname}:3000`;
+const API_URL = 'https://heavenly-server-xgc4.onrender.com';
 
 const fixImageUrl = (url) => {
   if (!url || typeof url !== 'string') return '';
-  return url.replace('localhost', window.location.hostname);
+  return url.replace('http://localhost:3000', API_URL).replace('localhost', 'heavenly-server-xgc4.onrender.com');
 };
 
 const bgImageUrl = 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2560&auto=format&fit=crop';
