@@ -744,7 +744,6 @@ function App() {
                       {order.photo_url_2 && <img src={fixImageUrl(order.photo_url_2)} style={{ width: '50%', height: '100%', objectFit: 'cover', borderLeft: '1px solid white', cursor: 'zoom-in' }} onClick={(e) => { e.stopPropagation(); setExpandedImage(fixImageUrl(order.photo_url_2)); }} />}
                     </div>
                     <div>
-                      {/* BUYER DASHBOARD: Display exactly how many pallets they bought! */}
                       <h3 style={{ margin: '0 0 5px 0', color: '#0f172a' }}>
                         {order.purchased_pallets} Pallets of {order.commodity_type} <span style={{ fontWeight: 'normal', color: '#64748b' }}>({order.purchased_boxes} boxes)</span>
                         <span style={{ fontSize: '12px', background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '6px', fontWeight: '600', color: '#475569' }}>{order.grade}</span>
@@ -806,9 +805,9 @@ function App() {
               </div>
               <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', width: '100%', background: '#020617' }} zoomControl={false}>
                 <MapController center={mapCenter} zoom={mapZoom} />
-                <TileLayer detectRetina={true} url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
-                <TileLayer detectRetina={true} url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
-                <TileLayer detectRetina={true} url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}" />
+                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
+                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
+                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}" />
                 {userLocation && (<Marker position={userLocation} icon={userIcon}><Popup><div style={{ fontWeight: 'bold', color: '#0f172a' }}>📍 You Are Here</div></Popup></Marker>)}
                 {uniqueLocations.map((loc, i) => {
                   const isSelected = selectedMapLocation === loc.name;
@@ -850,7 +849,6 @@ function App() {
                         🏢 HT Verified Grower <span style={{ background: '#dcfce3', color: '#166534', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>✓ CERT: {pallet.cert_type ? pallet.cert_type.toUpperCase() : 'DOCS'}</span>
                       </div>
                       
-                      {/* MARKETPLACE UI: Showing exactly how many pallets are left */}
                       <p style={{ margin: '0 0 15px 0', color: '#e2e8f0', fontSize: '15px', fontWeight: 'bold' }}>
                         {pallet.pallets_available} Pallet(s) Available <span style={{ color: '#94a3b8', fontSize: '13px', fontWeight: 'normal' }}>({pallet.boxes_per_pallet} boxes/pallet)</span>
                       </p>
@@ -879,7 +877,6 @@ function App() {
                         {token ? (
                           role === 'buyer' && (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={e => e.stopPropagation()}>
-                              {/* NEW: THE QUANTITY SELECTOR! */}
                               <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
                                 <label style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold' }}>QTY:</label>
                                 <input type="number" min="1" max={pallet.pallets_available} value={buyQty[pallet.id] || 1} onChange={e => setBuyQty({...buyQty, [pallet.id]: e.target.value})} className="modern-input" style={{ width: '40px', padding: '2px 4px', fontSize: '14px', background: '#0f172a', color: 'white', border: 'none', textAlign: 'center' }} />
@@ -941,7 +938,6 @@ function App() {
                 {growerOffers.map(offer => (
                   <div key={offer.id} style={{ padding: '20px', border: '1px solid #e2e8f0', borderRadius: '8px', background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div>
-                      {/* GROWER DASHBOARD: Shows how many pallets the buyer wants! */}
                       <h3 style={{ margin: '0 0 5px 0', color: '#0f172a' }}>Offer for {offer.requested_pallets} Pallets of {offer.commodity_type} <span style={{ fontSize: '13px', color: '#64748b', fontWeight: 'normal' }}>(Original Price: ${offer.asking_price})</span></h3>
                       <p style={{ margin: '0 0 5px 0', color: '#0ea5e9', fontWeight: 'bold' }}>Buyer: HT Verified Buyer | PACA #: {offer.paca_number || 'N/A'}</p>
                       <p style={{ margin: 0, fontSize: '13px', color: '#64748b' }}>Requested Terms: {offer.payment_terms} | Counters used: {offer.grower_counter_count} / 2</p>
@@ -1005,7 +1001,6 @@ function App() {
                       <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Size (e.g. 88s)</label><input type="text" value={newSize} onChange={e => setNewSize(e.target.value)} className="modern-input" /></div>
                     </div>
                     <div style={{ display: 'flex', gap: '15px' }}>
-                      {/* NEW: PALLET CONFIGURATION INPUTS */}
                       <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Total Pallets Available</label><input type="number" required value={newPalletsAvailable} onChange={e => setNewPalletsAvailable(e.target.value)} className="modern-input" /></div>
                       <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Boxes per Pallet</label><input type="number" required value={newBoxesPerPallet} onChange={e => setNewBoxesPerPallet(e.target.value)} className="modern-input" placeholder="e.g. 54" /></div>
                       <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Asking Price ($/box)</label><input type="number" step="0.01" required value={newPrice} onChange={e => setNewPrice(e.target.value)} className="modern-input" /></div>
