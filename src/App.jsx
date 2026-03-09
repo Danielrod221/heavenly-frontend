@@ -803,7 +803,7 @@ function App() {
                 <button onClick={locateUser} className="btn-primary" style={{ background: '#0ea5e9', fontSize: '11px', padding: '6px 10px', width: '100%', marginBottom: selectedMapLocation ? '10px' : '0' }}>📡 Scan My Location</button>
                 {selectedMapLocation && (<button onClick={() => setSelectedMapLocation(null)} style={{ background: 'transparent', border: '1px dashed #ef4444', color: '#ef4444', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'block' }}>✕ Clear Filter</button>)}
               </div>
-              <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', width: '100%', background: '#020617' }} zoomControl={false}>
+              <MapContainer center={mapCenter} zoom={mapZoom}  zoomControl=style={{ height: '400px', minHeight: '400px', width: '100%', background: '#020617', zIndex: 1 }}{false}>
                 <MapController center={mapCenter} zoom={mapZoom} />
                 <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
                 <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
