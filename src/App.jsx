@@ -255,7 +255,7 @@ function App() {
       const res = await fetch(`${API_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: orderId, totalCost, poNumber })
+        body: JSON.stringify({ order_id: orderId, total_cost: totalCost, po_number: poNumber })
       });
       const data = await res.json();
       if (data.success && data.url) {
