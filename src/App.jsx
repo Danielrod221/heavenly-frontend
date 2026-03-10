@@ -212,6 +212,9 @@ function App() {
   const [locationQuery, setLocationQuery] = useState('');
   const [locationResults, setLocationResults] = useState([]);
   const [newLocation, setNewLocation] = useState('');
+  const [newAddress, setNewAddress] = useState('');
+  const [newCity, setNewCity] = useState('');
+  const [newStateLoc, setNewStateLoc] = useState('');
   const [newLat, setNewLat] = useState(null); 
   const [newLon, setNewLon] = useState(null); 
   const [searchTimeout, setSearchTimeout] = useState(null);
@@ -321,27 +324,37 @@ function App() {
     setSearchTimeout(timeoutId);
   };
 
-  const handleAddPallet = async (e) => {
+const handleAddPallet = async (e) => {
     e.preventDefault();
     if (!myDocs.w9_url || !myDocs.cert_url) { alert("🛑 COMPLIANCE HOLD: You must upload your documents before you can list inventory."); return; }
-    if (!newLocation || newLocation.trim() === '') { alert("Please provide a physical Loading Location."); return; }
+    if (!newAddress || !newCity || !newStateLoc) { alert("Please provide the full Street Address, City, and State."); return; }
     if (!newPhotoFile || !newPhotoFile2) { alert("Please select BOTH a photo of the Box and Fruit!"); return; }
     
-    let finalLat = newLat; let finalLon = newLon;
+    const fullLocation = `${newAddress.trim()}, ${newCity.trim()}, ${newStateLoc.trim()}`;
+    const fallbackLocation = `${newCity.trim()}, ${newStateLoc.trim()}`;
+    let finalLat = null; let finalLon = null;
 
-    if (!finalLat || !finalLon) {
-      try {
-        let searchRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(newLocation)}&countrycodes=us&limit=1`);
-        let searchData = await searchRes.json();
-        if (searchData && searchData.length > 0) { finalLat = searchData[0].lat; finalLon = searchData[0].lon; } 
-      } catch (err) {}
-    }
-    if (!finalLat || !finalLon) { finalLat = "35.7688"; finalLon = "-119.2471"; }
+    try {
+      // 1. Try to pinpoint the exact street address first
+      let searchRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullLocation)}&countrycodes=us&limit=1`);
+      let searchData = await searchRes.json();
+      if (searchData && searchData.length > 0) { finalLat = searchData[0].lat; finalLon = searchData[0].lon; } 
+      else {
+        // 2. FALLBACK: If street is hidden, pinpoint the City/State for the map radar!
+        let fallbackRes = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fallbackLocation)}&countrycodes=us&limit=1`);
+        let fallbackData = await fallbackRes.json();
+        if (fallbackData && fallbackData.length > 0) { finalLat = fallbackData[0].lat; finalLon = fallbackData[0].lon; }
+      }
+    } catch (err) {}
+    
+    if (!finalLat || !finalLon) { finalLat = "35.7688"; finalLon = "-119.2471"; } // Ultimate fail-safe
 
     const formData = new FormData();
     formData.append('grower_id', userId); formData.append('commodity_type', newCommodity); 
     formData.append('pallets_available', newPalletsAvailable); formData.append('boxes_per_pallet', newBoxesPerPallet); 
-    formData.append('asking_price', newPrice); formData.append('pack_style', newPackStyle); formData.append('weight', newWeight); formData.append('variety', newVariety); formData.append('location', newLocation); formData.append('loading_window', newLoadingWindow); formData.append('grade', newGrade); 
+    formData.append('asking_price', newPrice); formData.append('pack_style', newPackStyle); formData.append('weight', newWeight); formData.append('variety', newVariety); 
+    formData.append('location', fullLocation); // Save full address to DB for the PO!
+    formData.append('loading_window', newLoadingWindow); formData.append('grade', newGrade); 
     formData.append('size', newSize); formData.append('payment_terms', newPaymentTerms); formData.append('storage_temp', newStorageTemp);
     formData.append('brand', newBrand); formData.append('lat', finalLat); formData.append('lon', finalLon); 
     formData.append('photo', newPhotoFile); formData.append('photo2', newPhotoFile2);
@@ -352,7 +365,7 @@ function App() {
       if (data.success) {
         alert('Success! Your fruit is now live in the cooler.');
         setNewCommodity(''); setNewPalletsAvailable(''); setNewBoxesPerPallet(''); setNewPrice(''); setNewPackStyle(''); setNewWeight(''); setNewVariety(''); setNewBrand('');
-        setNewLocation(''); setLocationResults([]); setNewLat(null); setNewLon(null);
+        setNewAddress(''); setNewCity(''); setNewStateLoc(''); setNewLat(null); setNewLon(null);
         setNewLoadingWindow('Mon-Fri: 8:00 AM - 4:00 PM'); setNewGrade('Fancy'); setNewSize(''); setNewPaymentTerms('Net 30'); setNewStorageTemp('');
         setNewPhotoFile(null); setNewPhotoFile2(null);
         document.getElementById('file-box').value = ""; document.getElementById('file-fruit').value = "";
@@ -908,17 +921,22 @@ function App() {
                     </div>
                     
                     <div style={{ display: 'flex', gap: '15px', background: '#f8fafc', padding: '15px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                      <div style={{ flex: 2, position: 'relative' }}>
-                        <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500', color: '#0ea5e9' }}>📍 Verified Loading Location</label>
-                        <input type="text" required value={newLocation} onChange={e => handleLocationSearch(e.target.value)} className="modern-input" placeholder="Start typing U.S. address..." autoComplete="off" />
-                        {locationResults.length > 0 && (
-                          <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, background: 'white', border: '1px solid #cbd5e1', borderRadius: '6px', zIndex: 50, maxHeight: '200px', overflowY: 'auto', boxShadow: '0 10px 25px rgba(0,0,0,0.2)', marginTop: '5px' }}>
-                            {locationResults.map((result, idx) => (
-                              <div key={idx} onClick={() => { setLocationQuery(result.display_name); setNewLocation(result.display_name); setNewLat(result.lat); setNewLon(result.lon); setLocationResults([]); }} style={{ padding: '12px', borderBottom: '1px solid #f1f5f9', cursor: 'pointer', fontSize: '13px', color: '#0f172a', lineHeight: '1.4' }} onMouseEnter={e => e.target.style.background = '#f8fafc'} onMouseLeave={e => e.target.style.background = 'white'}>📍 {result.display_name}</div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
+                      <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+  <div>
+    <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>📍 Exact Street Address</label>
+    <input type="text" required value={newAddress} onChange={e => setNewAddress(e.target.value)} className="modern-input" placeholder="e.g. 123 Cold Storage Way" />
+  </div>
+  <div style={{ display: 'flex', gap: '10px' }}>
+    <div style={{ flex: 2 }}>
+      <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>City</label>
+      <input type="text" required value={newCity} onChange={e => setNewCity(e.target.value)} className="modern-input" placeholder="e.g. Fresno" />
+    </div>
+    <div style={{ flex: 1 }}>
+      <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>State</label>
+      <input type="text" required value={newStateLoc} onChange={e => setNewStateLoc(e.target.value)} className="modern-input" placeholder="CA" />
+    </div>
+  </div>
+</div>
                       
                       <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500', color: '#0ea5e9' }}>🕒 Loading Hours</label>
                         <select required value={newLoadingWindow} onChange={e => setNewLoadingWindow(e.target.value)} className="modern-input" style={{ width: '100%' }}>
