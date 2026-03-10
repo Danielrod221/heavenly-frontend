@@ -1053,30 +1053,29 @@ const handleDismissRequest = async (id) => {
             </div>
           </div>
 
-{growerData && growerData.pallet_breakdown && growerData.pallet_breakdown.length > 0 && (
-            <>
-              <h3 style={{ margin: '40px 0 20px 0', color: '#0f172a', background: 'rgba(255,255,255,0.95)', padding: '15px 20px', borderRadius: '8px', display: 'inline-block' }}>🧾 Sold Inventory & Pickups</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '40px' }}>
-                {growerData.pallet_breakdown.map(po => (
-                  <div key={po.id} className="card" style={{ padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '15px', justifyContent: 'space-between', borderLeft: '4px solid #10b981', background: '#fff' }}>
-                    <div>
-                      <h4 style={{ margin: '0 0 5px 0', color: '#0f172a', fontSize: '16px' }}>PO: {po.po_number} <span style={{ color: '#64748b', fontWeight: 'normal' }}>| {po.purchased_pallets} Pallets of {po.commodity_type}</span></h4>
-                      <p style={{ margin: '0 0 5px 0', color: '#64748b', fontSize: '13px' }}>Sold Price: ${po.sold_price}/box | Total Boxes: {po.purchased_boxes}</p>
-                      {po.appointment_time && <p style={{ margin: '8px 0 0 0', color: '#d97706', fontSize: '13px', fontWeight: 'bold' }}>📅 Scheduled Pickup: {formatApptDate(po.appointment_time)}</p>}
-                      <p style={{ margin: '5px 0 0 0', color: '#64748b', fontSize: '12px' }}>Ordered: {new Date(po.created_at).toLocaleDateString()}</p>
+{/* THE NEW BANK APP LEDGER */}
+          {growerData && growerData.pallet_breakdown && growerData.pallet_breakdown.length > 0 && (
+            <div style={{ marginBottom: '40px' }}>
+              <h3 style={{ margin: '0 0 15px 0', color: '#64748b', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>Transaction History</h3>
+              <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #e2e8f0', overflow: 'hidden', boxShadow: '0 4px 6px rgba(0,0,0,0.02)' }}>
+                {growerData.pallet_breakdown.map((po, index) => (
+                  <div key={po.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', borderBottom: index !== growerData.pallet_breakdown.length - 1 ? '1px solid #f1f5f9' : 'none' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                      <div style={{ background: '#dcfce7', color: '#166534', width: '42px', height: '42px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '20px', flexShrink: 0 }}>💸</div>
+                      <div>
+                        <h4 style={{ margin: '0 0 4px 0', color: '#0f172a', fontSize: '15px', fontWeight: '600' }}>Sold {po.purchased_pallets} Pallets ({po.commodity_type})</h4>
+                        <p style={{ margin: 0, color: '#64748b', fontSize: '13px' }}>{new Date(po.created_at).toLocaleDateString()} • PO: {po.po_number}</p>
+                      </div>
                     </div>
-                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-end' }}>
-                      <h3 style={{ margin: '0 0 8px 0', color: '#10b981', fontSize: '24px' }}>+ ${po.net_profit}</h3>
-                      <span style={{ fontSize: '11px', padding: '6px 10px', borderRadius: '6px', background: po.payment_status === 'paid' ? '#dcfce7' : '#f1f5f9', color: po.payment_status === 'paid' ? '#166534' : '#64748b', fontWeight: 'bold' }}>
-                        {po.payment_status === 'paid' ? '✓ FUNDS CLEARED' : 'PENDING PAYMENT'}
-                      </span>
+                    <div style={{ textAlign: 'right' }}>
+                      <h4 style={{ margin: '0 0 4px 0', color: '#166534', fontSize: '16px', fontWeight: 'bold' }}>+${po.net_profit}</h4>
+                      <p style={{ margin: 0, color: '#64748b', fontSize: '12px' }}>{po.purchased_boxes} boxes @ ${po.sold_price}/ea</p>
                     </div>
                   </div>
                 ))}
               </div>
-            </>
-          )}
-          <h3 style={{ margin: '40px 0 20px 0', color: '#0f172a', background: 'rgba(255,255,255,0.95)', padding: '15px 20px', borderRadius: '8px', display: 'inline-block' }}>My Active Listings</h3>
+            </div>
+          )}<h3 style={{ margin: '40px 0 20px 0', color: '#0f172a', background: 'rgba(255,255,255,0.95)', padding: '15px 20px', borderRadius: '8px', display: 'inline-block' }}>My Active Listings</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px', marginBottom: '30px' }}>
             {myListings.map(pallet => (
               <div key={pallet.id} className="card" style={{ padding: '15px', border: '1px solid #0ea5e9', background: 'rgba(255, 255, 255, 0.95)', height: 'auto', minHeight: 'fit-content' }}>
