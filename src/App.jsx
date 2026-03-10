@@ -170,6 +170,7 @@ function App() {
   const [regPaca, setRegPaca] = useState(''); 
   const [agreedToTerms, setAgreedToTerms] = useState(false); 
   const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
   const [hasReadTerms, setHasReadTerms] = useState(false);
 
   const [coolerData, setCoolerData] = useState([]);
@@ -546,7 +547,7 @@ const handleAddPallet = async (e) => {
     );
   };
 
-  // --- 1. LOGIN VIEW ---
+// --- 1. LOGIN VIEW ---
   if (view === 'login') {
     return (
       <PageWrapper>
@@ -569,6 +570,29 @@ const handleAddPallet = async (e) => {
               <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '20px', marginTop: '15px', textAlign: 'center' }}>
                 <button type="button" onClick={() => { setHasReadTerms(true); setAgreedToTerms(true); setShowTermsModal(false); }} className="btn-primary" style={{ width: '100%', background: '#0ea5e9', padding: '12px', fontSize: '15px', fontWeight: 'bold' }}>I Have Read and Agree</button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {showInviteModal && (
+          <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(2, 6, 23, 0.85)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '20px', backdropFilter: 'blur(4px)' }}>
+            <div className="card" style={{ background: 'white', padding: '30px', borderRadius: '12px', maxWidth: '500px', width: '100%', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '15px', marginBottom: '20px' }}>
+                <h2 style={{ margin: 0, color: '#0f172a', fontSize: '20px' }}>Grower/Packer Invite Request</h2>
+                <button onClick={() => setShowInviteModal(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#94a3b8' }}>✕</button>
+              </div>
+              <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>To maintain market integrity, all supply-side accounts are manually vetted by HQ. Submit your details below.</p>
+              <form onSubmit={(e) => { 
+                e.preventDefault(); 
+                alert('Request submitted securely! HQ will review your credentials and contact you shortly.'); 
+                setShowInviteModal(false); 
+              }} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Company Name</label><input type="text" required className="modern-input" placeholder="e.g., Sunview Vineyards" /></div>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Contact Name</label><input type="text" required className="modern-input" placeholder="First and Last Name" /></div>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Email Address</label><input type="email" required className="modern-input" placeholder="name@company.com" /></div>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>PACA License Number</label><input type="text" className="modern-input" placeholder="Required for verification" /></div>
+                <button type="submit" className="btn-primary" style={{ background: '#d97706', color: 'white', fontSize: '15px', padding: '12px', fontWeight: 'bold', marginTop: '10px' }}>Submit Request to Admin</button>
+              </form>
             </div>
           </div>
         )}
@@ -605,10 +629,12 @@ const handleAddPallet = async (e) => {
                 <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: 'bold', color: '#0f172a' }}>Account Type</label><select value={loginRole} onChange={e => setLoginRole(e.target.value)} className="modern-input"><option value="buyer">Buyer Account</option><option value="grower">Grower Account</option><option value="admin">Admin (HQ Only)</option></select></div>
                 <button type="submit" className="btn-primary" style={{ background: '#38bdf8', color: '#0f172a', fontSize: '16px', padding: '12px', fontWeight: 'bold', boxShadow: '0 4px 10px rgba(56, 189, 248, 0.4)' }}>Secure Login</button>
                 <div style={{ textAlign: 'center', marginTop: '10px' }}><span style={{ fontSize: '14px', color: '#64748b' }}>New wholesale buyer? </span><button type="button" onClick={() => {setIsSignUp(true); setError('');}} style={{ background: 'none', border: 'none', color: '#0ea5e9', cursor: 'pointer', fontSize: '14px', fontWeight: '900' }}>Create an account</button></div>
+                
                 <div style={{ textAlign: 'center', marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #e2e8f0' }}>
-  <span style={{ fontSize: '13px', color: '#64748b' }}>Verified Grower/Seller? </span>
-  <a href="mailto:admin@theheavyterminal.com?subject=Grower%20Account%20Request&body=Hello,%20I%20would%20like%20to%20apply%20for%20a%20Verified%20Grower%20account.%20%0A%0ACompany%20Name:%20%0APACA%20Number:%20%0AContact%20Name:%20" style={{ color: '#d97706', fontWeight: 'bold', textDecoration: 'none', fontSize: '13px' }}>Request an Invite</a>
-</div>
+                  <span style={{ fontSize: '13px', color: '#64748b' }}>Verified Grower/Packer/Shipper? </span>
+                  <button type="button" onClick={() => setShowInviteModal(true)} style={{ background: 'none', border: 'none', color: '#d97706', fontWeight: 'bold', textDecoration: 'none', fontSize: '13px', cursor: 'pointer', padding: 0 }}>Request an Invite</button>
+                </div>
+
               </form>
             )}
           </div>
