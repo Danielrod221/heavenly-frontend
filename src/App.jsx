@@ -1088,7 +1088,7 @@ function App() {
                         role === 'buyer' && (
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={e => e.stopPropagation()}>
                             <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                              <label style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold' }}>QTY:</label>
+                              <label style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold' }}>Pallet QTY:</label>
                               <input type="number" min="1" max={pallet.pallets_available} value={buyQty[pallet.id] || 1} onChange={e => setBuyQty({...buyQty, [pallet.id]: e.target.value})} className="modern-input" style={{ width: '40px', padding: '2px 4px', fontSize: '14px', background: '#0f172a', color: 'white', border: 'none', textAlign: 'center' }} />
                             </div>
                             <button onClick={() => handleBuy(pallet.id)} className="btn-primary" style={{ background: '#38bdf8', color: '#0f172a', width: 'auto', padding: '8px 15px', fontWeight: 'bold', fontSize: '13px' }}>Buy Now</button>
