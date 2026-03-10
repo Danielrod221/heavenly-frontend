@@ -27,11 +27,21 @@ const userIcon = new L.DivIcon({
   iconAnchor: [10, 10]
 });
 
+// SAFARI FIX: Force map redraw 0.4 seconds after loading
 function MapController({ center, zoom }) {
   const map = useMap();
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [map]);
+
   useEffect(() => {
     if (center) map.flyTo(center, zoom, { duration: 1.5 });
   }, [center, zoom, map]);
+  
   return null;
 }
 
