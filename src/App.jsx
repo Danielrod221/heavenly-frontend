@@ -605,6 +605,10 @@ const handleAddPallet = async (e) => {
                 <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: 'bold', color: '#0f172a' }}>Account Type</label><select value={loginRole} onChange={e => setLoginRole(e.target.value)} className="modern-input"><option value="buyer">Buyer Account</option><option value="grower">Grower Account</option><option value="admin">Admin (HQ Only)</option></select></div>
                 <button type="submit" className="btn-primary" style={{ background: '#38bdf8', color: '#0f172a', fontSize: '16px', padding: '12px', fontWeight: 'bold', boxShadow: '0 4px 10px rgba(56, 189, 248, 0.4)' }}>Secure Login</button>
                 <div style={{ textAlign: 'center', marginTop: '10px' }}><span style={{ fontSize: '14px', color: '#64748b' }}>New wholesale buyer? </span><button type="button" onClick={() => {setIsSignUp(true); setError('');}} style={{ background: 'none', border: 'none', color: '#0ea5e9', cursor: 'pointer', fontSize: '14px', fontWeight: '900' }}>Create an account</button></div>
+                <div style={{ textAlign: 'center', marginTop: '15px', paddingTop: '15px', borderTop: '1px solid #e2e8f0' }}>
+  <span style={{ fontSize: '13px', color: '#64748b' }}>Verified Grower/Seller? </span>
+  <a href="mailto:admin@theheavyterminal.com?subject=Grower%20Account%20Request&body=Hello,%20I%20would%20like%20to%20apply%20for%20a%20Verified%20Grower%20account.%20%0A%0ACompany%20Name:%20%0APACA%20Number:%20%0AContact%20Name:%20" style={{ color: '#d97706', fontWeight: 'bold', textDecoration: 'none', fontSize: '13px' }}>Request an Invite</a>
+</div>
               </form>
             )}
           </div>
