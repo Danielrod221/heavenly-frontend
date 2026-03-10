@@ -1000,7 +1000,7 @@ function App() {
         <div className="dashboard-container">
           <div className="map-section" style={{ backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.6), rgba(15, 23, 42, 0.8)), url('${satelliteMapUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="radar-sweep" />
-            <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(15,23,42,0.85)', padding: '15px', borderRadius: '8px', border: '1px solid #334155', color: '#f8fafc', zIndex: 2000, boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
+            <div style={{ position: 'absolute', bottom: '20px', left: '20px', background: 'rgba(15,23,42,0.85)', padding: '15px', borderRadius: '8px', border: '1px solid #334155', color: '#f8fafc', zIndex: 2000, boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
               <h3 style={{ margin: 0, fontSize: '14px', color: '#38bdf8', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%', boxShadow: '0 0 10px #4ade80' }}></span>LIVE SATELLITE GRID</h3>
               <p style={{ margin: '5px 0 10px 0', fontSize: '12px', color: '#94a3b8' }}>Select a pin to view isolated inventory.</p>
               <button onClick={locateUser} className="btn-primary" style={{ background: '#0ea5e9', fontSize: '11px', padding: '6px 10px', width: '100%', marginBottom: selectedMapLocation ? '10px' : '0' }}>📡 Scan My Location</button>
