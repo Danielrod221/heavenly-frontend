@@ -980,7 +980,8 @@ function App() {
     ); 
   }
 
-  // --- 5. DEFAULT PUBLIC VIEW (THE COOLER) ---
+// --- 5. DEFAULT PUBLIC VIEW (THE COOLER) ---
+  const displayedPallets = selectedMapLocation ? coolerData.filter(p => p.location === selectedMapLocation) : coolerData;
   return (
     <PageWrapper>
       {renderLightbox()}
