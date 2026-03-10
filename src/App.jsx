@@ -445,6 +445,40 @@ const handleDismissRequest = async (id) => {
     } catch(err) { alert('Failed to send offer.'); }
   };
 
+  const handleCashOut = async () => {
+    if (!growerData || !growerData.available_balance || growerData.available_balance <= 0) {
+      return alert("Your available balance is $0.00. Wait for buyers to pay their invoices before cashing out.");
+    }
+    
+    // Simulate the Stripe Connect payout delay
+    const btn = document.getElementById('cash-out-btn');
+    const originalText = btn.innerText;
+    btn.innerText = '⏳ Connecting to Bank...';
+    btn.style.opacity = '0.7';
+    btn.style.pointerEvents = 'none';
+
+    try {
+      const res = await fetch(`${API_URL}/api/cash-out`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ grower_id: userId })
+      });
+      const data = await res.json();
+      if (data.success) {
+        alert("💸 Transfer Initiated! Your funds will arrive in your linked bank account in 1-2 business days.");
+        fetch(`${API_URL}/api/grower-dashboard/${userId}`).then(res => res.json()).then(data => { if(data.success) setGrowerData(data) });
+      }
+    } catch (err) { 
+      alert("Failed to process transfer."); 
+    } finally {
+      if (btn) {
+        btn.innerText = originalText;
+        btn.style.opacity = '1';
+        btn.style.pointerEvents = 'auto';
+      }
+    }
+  };
+
   const handleCounterOffer = async (offerId) => {
     try {
       const res = await fetch(`${API_URL}/api/offers/counter`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ offer_id: offerId, new_amount: counterAmount, actor: role }) });
@@ -894,7 +928,7 @@ const handleDismissRequest = async (id) => {
     );
   }
 
-  // --- 4. DASHBOARD VIEW (GROWER) ---
+// --- 4. DASHBOARD VIEW (GROWER) ---
   if (view === 'dashboard') {
     return (
       <PageWrapper>
@@ -951,7 +985,23 @@ const handleDismissRequest = async (id) => {
           )}
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px', marginBottom: '30px' }}>
-            {growerData && (<div className="card" style={{ padding: '30px', height: 'fit-content', background: 'rgba(255, 255, 255, 0.95)' }}><p style={{ color: '#64748b', fontWeight: '600' }}>Total Sales Revenue</p><h2 style={{ fontSize: '42px', color: '#0ea5e9', margin: 0 }}>${growerData.total_net_profit}</h2></div>)}
+            
+            {/* NEW DUAL-PANE BANK UI */}
+            {growerData && (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', height: 'fit-content' }}>
+                <div className="card hide-on-print" style={{ padding: '30px', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', color: 'white', border: '1px solid #334155' }}>
+                  <p style={{ color: '#94a3b8', fontWeight: '600', margin: '0 0 5px 0' }}>Available to Cash Out</p>
+                  <h2 style={{ fontSize: '42px', color: '#4ade80', margin: '0 0 20px 0' }}>${growerData.available_balance || '0.00'}</h2>
+                  <button id="cash-out-btn" onClick={handleCashOut} style={{ background: '#4ade80', color: '#0f172a', border: 'none', padding: '12px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', width: '100%', fontSize: '15px', boxShadow: '0 4px 15px rgba(74, 222, 128, 0.2)', transition: 'all 0.2s' }}>
+                    💸 Withdraw to Bank
+                  </button>
+                </div>
+                <div className="card" style={{ padding: '30px', background: 'rgba(255, 255, 255, 0.95)', border: '1px solid #e2e8f0' }}>
+                  <p style={{ color: '#64748b', fontWeight: '600', margin: '0 0 5px 0' }}>Lifetime Sales Revenue</p>
+                  <h2 style={{ fontSize: '42px', color: '#0ea5e9', margin: 0 }}>${growerData.total_net_profit || '0.00'}</h2>
+                </div>
+              </div>
+            )}
             
             <div className="card" style={{ padding: '30px', background: 'rgba(255, 255, 255, 0.95)', height: 'auto' }}>
               <h2 style={{ margin: '0 0 5px 0', color: '#0f172a' }}>Add Inventory to Cooler</h2>
@@ -994,7 +1044,7 @@ const handleDismissRequest = async (id) => {
                       </div>
                     </div>
                     
-<div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', borderTop: '2px dashed #e2e8f0', paddingTop: '15px', marginTop: '5px' }}>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', borderTop: '2px dashed #e2e8f0', paddingTop: '15px', marginTop: '5px' }}>
                       <div style={{ flex: '1 1 100%' }}>
                         <label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold', color: '#0ea5e9' }}>📍 Exact Street Address</label>
                         <input type="text" required value={newAddress} onChange={e => setNewAddress(e.target.value)} className="modern-input" placeholder="e.g. 8507 Road 256" />
@@ -1048,12 +1098,13 @@ const handleDismissRequest = async (id) => {
                         btn.style.pointerEvents = 'none';
                       }
                     }} style={{ marginTop: '10px', background: '#0ea5e9', transition: 'all 0.3s' }}>List Pallet in Cooler</button>
-                  </form>               </>
+                  </form>
+                </>
               )}
             </div>
           </div>
 
-{/* THE NEW BANK APP LEDGER */}
+          {/* THE NEW BANK APP LEDGER */}
           {growerData && growerData.pallet_breakdown && growerData.pallet_breakdown.length > 0 && (
             <div style={{ marginBottom: '40px' }}>
               <h3 style={{ margin: '0 0 15px 0', color: '#64748b', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 'bold' }}>Transaction History</h3>
@@ -1075,7 +1126,9 @@ const handleDismissRequest = async (id) => {
                 ))}
               </div>
             </div>
-          )}<h3 style={{ margin: '40px 0 20px 0', color: '#0f172a', background: 'rgba(255,255,255,0.95)', padding: '15px 20px', borderRadius: '8px', display: 'inline-block' }}>My Active Listings</h3>
+          )}
+
+          <h3 style={{ margin: '40px 0 20px 0', color: '#0f172a', background: 'rgba(255,255,255,0.95)', padding: '15px 20px', borderRadius: '8px', display: 'inline-block' }}>My Active Listings</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px', marginBottom: '30px' }}>
             {myListings.map(pallet => (
               <div key={pallet.id} className="card" style={{ padding: '15px', border: '1px solid #0ea5e9', background: 'rgba(255, 255, 255, 0.95)', height: 'auto', minHeight: 'fit-content' }}>
