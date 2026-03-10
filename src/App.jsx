@@ -496,8 +496,10 @@ const handleDismissRequest = async (id) => {
     if (!token) return;
 
     fetchTradingFloor(); 
-    if (view === 'dashboard') { fetch(`${API_URL}/api/grower-dashboard/${userId}`).then(res => res.json()).then(data => { if(data.success) setGrowerData(data) }); refreshMyListings(); fetchMyDocs(); } 
-    else if (view === 'orders') { fetch(`${API_URL}/api/buyer-orders/${userId}`).then(res => res.json()).then(data => { if(data.success) { setBuyerOrders(data.orders); setBuyerTotal(data.total_owed); } }); fetchMyDocs(); } 
+    fetchMyDocs(); // 🔒 SECURITY FIX: Always fetch W-9 status no matter what screen you are on!
+    
+    if (view === 'dashboard') { fetch(`${API_URL}/api/grower-dashboard/${userId}`).then(res => res.json()).then(data => { if(data.success) setGrowerData(data) }); refreshMyListings(); } 
+    else if (view === 'orders') { fetch(`${API_URL}/api/buyer-orders/${userId}`).then(res => res.json()).then(data => { if(data.success) { setBuyerOrders(data.orders); setBuyerTotal(data.total_owed); } }); } 
     else if (view === 'admin') { fetchAdminData(); }
   }, [view, token, userId]);
 
