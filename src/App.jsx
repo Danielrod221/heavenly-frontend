@@ -1083,7 +1083,7 @@ const handleAddPallet = async (e) => {
                   <div style={{ padding: '20px', flex: 1 }}>
                     <h2 style={{ margin: '0 0 5px 0', color: '#f8fafc', fontSize: '18px' }}>
                       {pallet.commodity_type} {pallet.variety && `- ${pallet.variety}`}
-                      {pallet.grade && <span style={{ fontSize: '10px', background: '#1e293b', border: '1px solid #334155', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '8px', fontWeight: '600', color: '#cbd5e1' }}>Grade: {pallet.grade}</span>
+                      {pallet.grade && <span style={{ fontSize: '10px', background: '#1e293b', border: '1px solid #334155', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '8px', fontWeight: '600', color: '#cbd5e1' }}>Grade: {pallet.grade}</span>}
                     </h2>
                     <div style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
                       🏢 HT Verified Grower <span style={{ background: '#dcfce3', color: '#166534', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>✓ CERT: {pallet.cert_type ? pallet.cert_type.toUpperCase() : 'DOCS'}</span>
