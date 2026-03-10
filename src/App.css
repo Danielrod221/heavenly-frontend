@@ -1,4 +1,10 @@
-/* 1. Reset the massive default padding */
+/* 1. THE RADAR MOTOR (This unfreezes the spinning animation!) */
+@keyframes spin {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* 2. Reset the massive default padding */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -6,17 +12,17 @@
   width: 100%;
 }
 
-/* 2. The main container */
+/* 3. The main container */
 .dashboard-container {
   display: flex;
   flex-direction: row; 
   flex: 1;
   gap: 20px;
   padding: 0 20px 20px 20px;
-  overflow: hidden; /* Desktop: keeps things neat, only lists scroll */
+  overflow: hidden; 
 }
 
-/* 3. The Map Section */
+/* 4. The Map Section & OVERLAP FIX */
 .map-section {
   flex: 2; 
   position: relative;
@@ -24,9 +30,19 @@
   border: 2px solid #1e293b;
   overflow: hidden;
   box-shadow: inset 0 0 100px rgba(56, 189, 248, 0.4);
+  z-index: 10; /* THIS LOCKS THE SATELLITE TAB SO IT CANNOT OVERLAP THE NAVBAR! */
+  min-height: 400px;
 }
 
-/* 4. The Inventory Section */
+/* 5. SAFARI MAP FIX (Forces the blank map tiles to actually render) */
+.leaflet-container {
+  height: 100% !important;
+  min-height: 400px !important;
+  width: 100% !important;
+  background: #020617 !important;
+}
+
+/* 6. The Inventory Section */
 .inventory-section {
   flex: 1; 
   min-width: 400px;
@@ -51,8 +67,7 @@
 
   .map-section {
     flex: none; 
-    height: 400px !important; /* Safari Sledgehammer: Force exactly 400px */
-    min-height: 400px !important;
+    height: 400px !important; /* Force Safari to keep the map exactly this tall */
     width: 100%;
     margin-bottom: 15px; 
   }
