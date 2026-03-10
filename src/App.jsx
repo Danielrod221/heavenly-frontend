@@ -1007,7 +1007,7 @@ function App() {
               {selectedMapLocation && (<button onClick={() => setSelectedMapLocation(null)} style={{ background: 'transparent', border: '1px dashed #ef4444', color: '#ef4444', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'block' }}>✕ Clear Filter</button>)}
             </div>
             
-            <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', width: '100%', background: '#020617', zIndex: 1 }} zoomControl={false}>
+            <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', minHeight: '450px', width: '100%', background: '#020617', zIndex: 1, position: 'relative' }} zoomControl={false}>
               <MapController center={mapCenter} zoom={mapZoom} />
               <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
               <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
