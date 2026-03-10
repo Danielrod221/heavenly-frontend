@@ -255,7 +255,7 @@ function App() {
       const res = await fetch(`${API_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ order_id: orderId, total_cost: totalCost, po_number: poNumber })
+        body: JSON.stringify({ order_id: orderId, totalCost, poNumber })
       });
       const data = await res.json();
       if (data.success && data.url) {
@@ -1000,11 +1000,17 @@ function App() {
         <div className="dashboard-container">
           <div className="map-section" style={{ backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.6), rgba(15, 23, 42, 0.8)), url('${satelliteMapUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
             <div className="radar-sweep" />
-            <div style={{ position: 'absolute', bottom: '20px', left: '20px', background: 'rgba(15,23,42,0.85)', padding: '15px', borderRadius: '8px', border: '1px solid #334155', color: '#f8fafc', zIndex: 2000, boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
-              <h3 style={{ margin: 0, fontSize: '14px', color: '#38bdf8', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%', boxShadow: '0 0 10px #4ade80' }}></span>LIVE SATELLITE GRID</h3>
-              <p style={{ margin: '5px 0 10px 0', fontSize: '12px', color: '#94a3b8' }}>Select a pin to view isolated inventory.</p>
-              <button onClick={locateUser} className="btn-primary" style={{ background: '#0ea5e9', fontSize: '11px', padding: '6px 10px', width: '100%', marginBottom: selectedMapLocation ? '10px' : '0' }}>📡 Scan My Location</button>
-              {selectedMapLocation && (<button onClick={() => setSelectedMapLocation(null)} style={{ background: 'transparent', border: '1px dashed #ef4444', color: '#ef4444', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'block' }}>✕ Clear Filter</button>)}
+            
+            {/* SLEEK FLOATING MAP CONTROLS */}
+            <div style={{ position: 'absolute', bottom: '20px', right: '20px', display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 2000 }}>
+              {selectedMapLocation && (
+                <button onClick={() => setSelectedMapLocation(null)} title="Clear Filter" style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#ef4444', color: 'white', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.5)', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '20px' }}>
+                  ✕
+                </button>
+              )}
+              <button onClick={locateUser} title="Scan My Location" style={{ width: '44px', height: '44px', borderRadius: '50%', background: '#0f172a', color: '#38bdf8', border: '2px solid #38bdf8', boxShadow: '0 4px 12px rgba(0,0,0,0.8)', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '20px' }}>
+                <span style={{ transform: 'rotate(-45deg)', display: 'inline-block', marginTop: '2px', marginLeft: '2px' }}>➤</span>
+              </button>
             </div>
             
             <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', minHeight: '450px', width: '100%', background: '#020617', zIndex: 1, position: 'relative' }} zoomControl={false}>
