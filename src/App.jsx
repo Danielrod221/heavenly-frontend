@@ -57,7 +57,7 @@ const CollapsiblePanel = ({ title, icon, children, defaultOpen = false }) => {
   );
 };
 
-// OVERLAP FIX: zIndex changed to 9999 so nothing overlaps the command center navbar!
+// OVERLAP FIX: Navbar z-index set to 9999 so nothing can cover it on phones
 const Navbar = ({ title, role, view, setView, handleLogout, token }) => (
   <nav className="hide-on-print" style={{ background: 'rgba(255, 255, 255, 0.95)', padding: '15px 40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', boxShadow: '0 4px 6px rgba(0,0,0,0.05)', marginBottom: '20px', position: 'sticky', top: 0, zIndex: 9999, borderBottom: '1px solid #e2e8f0' }}>
     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -524,10 +524,6 @@ function App() {
     );
   };
 
-  // ==========================================
-  // VIEW ROUTING
-  // ==========================================
-
   // --- 1. LOGIN VIEW ---
   if (view === 'login') {
     return (
@@ -988,11 +984,11 @@ function App() {
   return (
     <PageWrapper>
       {renderLightbox()}
-      <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#020617' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#020617' }}>
         <Navbar title="Command Center" role={role} view={view} setView={setView} handleLogout={handleLogout} token={token} />
         
-        <div className="dashboard-container" style={{ flex: 1, padding: '0 20px 20px 20px', overflow: 'hidden' }}>
-          <div className="map-section" style={{ backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.6), rgba(15, 23, 42, 0.8)), url('${satelliteMapUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '12px', border: '2px solid #1e293b', position: 'relative', overflow: 'hidden', boxShadow: 'inset 0 0 100px rgba(56, 189, 248, 0.4)' }}>
+        <div className="dashboard-container">
+          <div className="map-section">
             <div style={{ position: 'absolute', top: '50%', left: '50%', width: '200%', height: '200%', background: 'conic-gradient(from 0deg, transparent 70%, rgba(56, 189, 248, 0.3) 100%)', transform: 'translate(-50%, -50%)', borderRadius: '50%', animation: 'spin 4s linear infinite', pointerEvents: 'none', zIndex: 1000 }} />
             <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(15,23,42,0.85)', padding: '15px', borderRadius: '8px', border: '1px solid #334155', color: '#f8fafc', zIndex: 2000, boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
               <h3 style={{ margin: 0, fontSize: '14px', color: '#38bdf8', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%', boxShadow: '0 0 10px #4ade80' }}></span>LIVE SATELLITE GRID</h3>
@@ -1001,8 +997,7 @@ function App() {
               {selectedMapLocation && (<button onClick={() => setSelectedMapLocation(null)} style={{ background: 'transparent', border: '1px dashed #ef4444', color: '#ef4444', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'block' }}>✕ Clear Filter</button>)}
             </div>
             
-            {/* OVERLAP/SAFARI FIX: MapContainer height hard-coded to 100% with min-height */}
-            <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', minHeight: '400px', width: '100%', background: '#020617', zIndex: 1 }} zoomControl={false}>
+            <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', width: '100%', background: '#020617', zIndex: 1 }} zoomControl={false}>
               <MapController center={mapCenter} zoom={mapZoom} />
               <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
               <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
@@ -1020,12 +1015,12 @@ function App() {
             </MapContainer>
           </div>
 
-          <div className="inventory-section" style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid #1e293b', borderRadius: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+          <div className="inventory-section">
             <div style={{ padding: '20px', borderBottom: '1px solid #1e293b', background: '#0f172a' }}>
               <h3 style={{ margin: 0, color: 'white', fontSize: '18px' }}>{selectedMapLocation ? `Inventory at Location` : 'All Available Inventory'}</h3>
               <p style={{ margin: '5px 0 0 0', color: '#94a3b8', fontSize: '13px' }}>{displayedPallets.length} Pallets Found</p>
             </div>
-            <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {displayedPallets.map(pallet => (
                 <div 
                   key={pallet.id} 
