@@ -836,48 +836,45 @@ const handleDismissRequest = async (id) => {
                 const timeString = `${minsLeft}:${secsLeft < 10 ? '0' : ''}${secsLeft}`;
 
                 return (
-                <div key={i} className="card po-record" style={{ padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(248, 250, 252, 0.95)', border: '1px solid #e2e8f0', height: 'auto' }}>
-                  <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
-                    <div className="hide-on-print" style={{ display: 'flex', width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden' }}>
+                <div key={i} className="card po-record" style={{ padding: '20px', display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'space-between', alignItems: 'flex-start', background: 'rgba(248, 250, 252, 0.95)', border: '1px solid #e2e8f0', height: 'auto' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'flex-start', flex: '1 1 250px' }}>
+                    <div className="hide-on-print" style={{ display: 'flex', width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0, border: '1px solid #e2e8f0' }}>
                       <img src={fixImageUrl(order.photo_url)} style={{ width: order.photo_url_2 ? '50%' : '100%', height: '100%', objectFit: 'cover', cursor: 'zoom-in' }} onClick={(e) => { e.stopPropagation(); setExpandedImage(fixImageUrl(order.photo_url)); }} />
                       {order.photo_url_2 && <img src={fixImageUrl(order.photo_url_2)} style={{ width: '50%', height: '100%', objectFit: 'cover', borderLeft: '1px solid white', cursor: 'zoom-in' }} onClick={(e) => { e.stopPropagation(); setExpandedImage(fixImageUrl(order.photo_url_2)); }} />}
                     </div>
-                    <div>
-                      <h3 style={{ margin: '0 0 5px 0', color: '#0f172a' }}>
+                    <div style={{ flex: '1 1 200px' }}>
+                      <h3 style={{ margin: '0 0 5px 0', color: '#0f172a', fontSize: '15px' }}>
                         {order.purchased_pallets} Pallets of {order.commodity_type} <span style={{ fontWeight: 'normal', color: '#64748b' }}>({order.purchased_boxes} boxes)</span>
-                        <span style={{ fontSize: '12px', background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '6px', fontWeight: '600', color: '#475569' }}>Grade: {order.grade}</span>
+                        <span style={{ fontSize: '11px', background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '6px', fontWeight: '600', color: '#475569', display: 'inline-block', marginTop: '4px' }}>Grade: {order.grade}</span>
                       </h3>
-                      <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>PO Number: <strong>{order.po_number}</strong> {order.brand && `| Brand: ${order.brand}`}</p>
+                      <p style={{ margin: 0, color: '#64748b', fontSize: '13px' }}>PO Number: <strong>{order.po_number}</strong> {order.brand && `| Brand: ${order.brand}`}</p>
                       <p style={{ margin: '5px 0 0 0', color: '#64748b', fontSize: '12px' }}>Date: {new Date(order.created_at).toLocaleDateString()}</p>
-                      <p style={{ margin: '5px 0 0 0', color: '#0f172a', fontSize: '12px', fontWeight: 'bold' }}>📍 Pickup: <span style={{ fontWeight: 'normal', color: '#475569' }}>{order.location}</span></p>
- <a 
-  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.location)}`} 
-  target="_blank" 
-  rel="noopener noreferrer"
-  style={{ display: 'inline-block', marginTop: '8px', padding: '6px 12px', backgroundColor: '#3b82f6', color: 'white', borderRadius: '4px', textDecoration: 'none', fontSize: '12px', fontWeight: 'bold' }}
->
-  🗺️ Get Directions
-</a>
-                      {order.appointment_time && <p style={{ margin: '5px 0 0 0', color: '#166534', fontSize: '12px', fontWeight: 'bold' }}>📅 Scheduled: {formatApptDate(order.appointment_time)}</p>}
-                      <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }} className="hide-on-print">
-                         {order.grower_w9 && <a href={fixImageUrl(order.grower_w9)} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '11px', padding: '4px 8px', border: '1px solid #cbd5e1' }}>📄 View Grower W-9</a>}
-                         {order.grower_cert && <a href={fixImageUrl(order.grower_cert)} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '11px', padding: '4px 8px', border: '1px solid #cbd5e1' }}>📄 View {order.cert_type || 'Safety'} Cert</a>}
+                      <p style={{ margin: '8px 0 0 0', color: '#0f172a', fontSize: '12px', fontWeight: 'bold' }}>📍 Pickup: <span style={{ fontWeight: 'normal', color: '#475569' }}>{order.location}</span></p>
+                      
+                      <a href={`https://maps.google.com/?q=${encodeURIComponent(order.location)}`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '8px', padding: '6px 12px', backgroundColor: '#3b82f6', color: 'white', borderRadius: '6px', textDecoration: 'none', fontSize: '12px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(59,130,246,0.3)' }}>
+                        🗺️ Get Directions
+                      </a>
+                      
+                      {order.appointment_time && <p style={{ margin: '8px 0 0 0', color: '#166534', fontSize: '12px', fontWeight: 'bold' }}>📅 Scheduled: {formatApptDate(order.appointment_time)}</p>}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginTop: '12px' }} className="hide-on-print">
+                         {order.grower_w9 && <a href={fixImageUrl(order.grower_w9)} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '11px', padding: '6px 10px', border: '1px solid #cbd5e1' }}>📄 View Grower W-9</a>}
+                         {order.grower_cert && <a href={fixImageUrl(order.grower_cert)} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '11px', padding: '6px 10px', border: '1px solid #cbd5e1' }}>📄 View {order.cert_type || 'Safety'} Cert</a>}
                       </div>
                     </div>
                   </div>
-                  <div style={{ textAlign: 'right' }}>
-                    <h3 style={{ margin: '0 0 5px 0', color: '#0ea5e9', fontSize: '24px' }}>${order.total_cost}</h3>
-                    <div style={{ marginBottom: '10px' }}>
+                  <div style={{ flex: '1 1 140px', textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center' }}>
+                    <h3 style={{ margin: '0 0 8px 0', color: '#0ea5e9', fontSize: '24px' }}>${order.total_cost}</h3>
+                    <div style={{ marginBottom: '10px', width: '100%', display: 'flex', justifyContent: 'flex-end' }}>
                       {order.payment_status === 'paid' ? 
-                        <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>✓ PAID</span> : 
-                        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', justifyContent: 'flex-end' }}>
-                          <span style={{ background: '#f1f5f9', color: '#64748b', padding: '4px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>UNPAID</span>
-                          <button onClick={() => handleStripeCheckout(order.id, order.total_cost, order.po_number)} className="hide-on-print" style={{ background: '#6366f1', color: 'white', border: 'none', borderRadius: '4px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>💳 Pay Now</button>
+                        <span style={{ background: '#e0f2fe', color: '#0284c7', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 'bold' }}>✓ PAID</span> : 
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' }}>
+                          <span style={{ background: '#f1f5f9', color: '#64748b', padding: '4px 8px', borderRadius: '4px', fontSize: '11px', fontWeight: 'bold' }}>UNPAID</span>
+                          <button onClick={() => handleStripeCheckout(order.id, order.total_cost, order.po_number)} className="hide-on-print" style={{ background: '#6366f1', color: 'white', border: 'none', borderRadius: '6px', padding: '10px 16px', fontSize: '13px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 6px rgba(99,102,241,0.3)' }}>💳 Pay Now</button>
                         </div>
                       }
                     </div>
                     {canCancel && (
-                      <button onClick={() => handleCancelOrder(order.id)} className="hide-on-print" style={{ background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', borderRadius: '4px', padding: '6px 10px', fontSize: '11px', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', transition: 'all 0.2s' }}>
+                      <button onClick={() => handleCancelOrder(order.id)} className="hide-on-print" style={{ background: '#fee2e2', color: '#991b1b', border: '1px solid #fca5a5', borderRadius: '6px', padding: '8px 10px', fontSize: '11px', cursor: 'pointer', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.05)', transition: 'all 0.2s', width: '100%', maxWidth: '160px' }}>
                         ⏳ Cancel Window: {timeString}
                       </button>
                     )}
