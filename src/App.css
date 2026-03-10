@@ -44,15 +44,11 @@ html, body, #root {
   overflow: hidden;
 }
 
-/* SAFARI MAP FIX: Pin the map to the corners so it cannot be 0 pixels tall */
+/* SAFARI MAP FIX: Hard-coded pixel heights so it cannot be 0 */
 .leaflet-container {
-  position: absolute !important;
-  top: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  height: auto !important;
-  width: auto !important;
+  height: 100% !important;
+  min-height: 450px !important;
+  width: 100% !important;
   background: #020617 !important;
   z-index: 1 !important;
 }
@@ -74,7 +70,8 @@ html, body, #root {
   
   .map-section {
     flex: none; 
-    height: 450px !important; /* Explicitly tell Safari how tall the map wrapper is! */
+    height: 450px !important; 
+    min-height: 450px !important;
     width: 100%;
     margin-bottom: 20px;
   }
