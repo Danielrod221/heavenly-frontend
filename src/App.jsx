@@ -194,6 +194,7 @@ function App() {
   const [adminUsers, setAdminUsers] = useState([]); 
   const [adminUnpaidOrders, setAdminUnpaidOrders] = useState([]); 
   const [adminListings, setAdminListings] = useState([]); 
+  const [adminRequests, setAdminRequests] = useState([]);
 
   const [myDocs, setMyDocs] = useState({ w9_url: null, cert_url: null, cert_type: '' }); 
 
@@ -406,7 +407,12 @@ const handleAddPallet = async (e) => {
       if ((await res.json()).success) refreshMyListings(); 
     } catch(err) {}
   };
-
+const handleDismissRequest = async (id) => {
+    try {
+      await fetch(`${API_URL}/api/admin-requests/dismiss`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ request_id: id }) });
+      fetchAdminData();
+    } catch(err) {}
+  };
   const handleAdminDeletePallet = async (palletId) => {
     if (!window.confirm("ADMIN OVERRIDE: Are you sure you want to permanently delete this user's listing?")) return;
     try {
@@ -483,6 +489,7 @@ const handleAddPallet = async (e) => {
     fetch(`${API_URL}/api/admin-orders`).then(r => r.json()).then(d => { if(d.success) setAdminUnpaidOrders(d.orders); }); 
     fetch(`${API_URL}/api/admin-listings`).then(r => r.json()).then(d => { if(d.success) setAdminListings(d.listings); }); 
   };
+  fetch(`${API_URL}/api/admin-requests`).then(r => r.json()).then(d => { if(d.success) setAdminRequests(d.requests); });
 
   useEffect(() => {
     if (view === 'cooler') { fetch(`${API_URL}/api/live-cooler`).then(res => res.json()).then(data => { if(data.success) setCoolerData(data.data) }); }
@@ -582,15 +589,24 @@ const handleAddPallet = async (e) => {
                 <button onClick={() => setShowInviteModal(false)} style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#94a3b8' }}>✕</button>
               </div>
               <p style={{ color: '#64748b', fontSize: '14px', marginBottom: '20px' }}>To maintain market integrity, all supply-side accounts are manually vetted by HQ. Submit your details below.</p>
-              <form onSubmit={(e) => { 
+              <form onSubmit={async (e) => { 
                 e.preventDefault(); 
-                alert('Request submitted securely! HQ will review your credentials and contact you shortly.'); 
-                setShowInviteModal(false); 
+                const payload = {
+                  company_name: e.target.company.value,
+                  contact_name: e.target.contact.value,
+                  email: e.target.email.value,
+                  paca_number: e.target.paca.value
+                };
+                try {
+                  await fetch(`${API_URL}/api/request-invite`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                  alert('Request submitted securely! HQ will review your credentials and contact you shortly.'); 
+                  setShowInviteModal(false); 
+                } catch(err) { alert('Server error'); }
               }} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Company Name</label><input type="text" required className="modern-input" placeholder="e.g., Sunview Vineyards" /></div>
-                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Contact Name</label><input type="text" required className="modern-input" placeholder="First and Last Name" /></div>
-                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Email Address</label><input type="email" required className="modern-input" placeholder="name@company.com" /></div>
-                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>PACA License Number</label><input type="text" className="modern-input" placeholder="Required for verification" /></div>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Company Name</label><input name="company" type="text" required className="modern-input" placeholder="e.g., Sunview Vineyards" /></div>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Contact Name</label><input name="contact" type="text" required className="modern-input" placeholder="First and Last Name" /></div>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Email Address</label><input name="email" type="email" required className="modern-input" placeholder="name@company.com" /></div>
+                <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>PACA License Number</label><input name="paca" type="text" className="modern-input" placeholder="Required for verification" /></div>
                 <button type="submit" className="btn-primary" style={{ background: '#d97706', color: 'white', fontSize: '15px', padding: '12px', fontWeight: 'bold', marginTop: '10px' }}>Submit Request to Admin</button>
               </form>
             </div>
@@ -695,6 +711,26 @@ const handleAddPallet = async (e) => {
             </div>
           </div>
 
+<div className="card" style={{ padding: '30px', gridColumn: '1 / -1', background: 'rgba(255, 255, 255, 0.95)', height: 'auto', border: '2px solid #d97706', marginBottom: '30px' }}>
+            <h2 style={{ margin: '0 0 5px 0', color: '#0f172a' }}>📬 Pending Grower Approvals</h2>
+            <p style={{ color: '#64748b', marginBottom: '20px' }}>Review applications. Once verified, use the "Create New Account" tool above to generate their access.</p>
+            <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
+              <thead><tr style={{ borderBottom: '2px solid #e2e8f0', color: '#64748b' }}><th style={{ padding: '10px' }}>Date</th><th style={{ padding: '10px' }}>Company</th><th style={{ padding: '10px' }}>Contact</th><th style={{ padding: '10px' }}>Email</th><th style={{ padding: '10px' }}>PACA</th><th style={{ padding: '10px' }}>Action</th></tr></thead>
+              <tbody>
+                {adminRequests && adminRequests.map(req => (
+                  <tr key={req.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                    <td style={{ padding: '15px 10px', color: '#64748b', fontSize: '13px' }}>{new Date(req.created_at).toLocaleDateString()}</td>
+                    <td style={{ padding: '15px 10px', fontWeight: 'bold', color: '#0f172a' }}>{req.company_name}</td>
+                    <td style={{ padding: '15px 10px' }}>{req.contact_name}</td>
+                    <td style={{ padding: '15px 10px', color: '#0ea5e9' }}>{req.email}</td>
+                    <td style={{ padding: '15px 10px', color: '#64748b' }}>{req.paca_number || 'N/A'}</td>
+                    <td style={{ padding: '15px 10px' }}><button onClick={() => handleDismissRequest(req.id)} className="btn-secondary" style={{ color: '#ef4444', border: '1px solid #fca5a5', padding: '4px 10px', fontSize: '11px', background: '#fef2f2' }}>Dismiss</button></td>
+                  </tr>
+                ))}
+                {(!adminRequests || adminRequests.length === 0) && <tr><td colSpan="6" style={{ padding: '20px', textAlign: 'center', color: '#64748b' }}>No pending requests.</td></tr>}
+              </tbody>
+            </table>
+          </div>
           <div className="card" style={{ padding: '30px', gridColumn: '1 / -1', background: 'rgba(255, 255, 255, 0.95)', height: 'auto' }}>
             <h2 style={{ margin: '0 0 5px 0', color: '#0f172a' }}>Accounts Receivable (Unpaid Invoices)</h2><p style={{ color: '#64748b', marginBottom: '20px' }}>Mark invoices as paid once the check clears.</p>
             <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
