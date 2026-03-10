@@ -90,6 +90,8 @@ const Navbar = ({ title, role, view, setView, handleLogout, token }) => (
 
 const ComplianceCard = ({ myDocs, handleDocUpload, role }) => {
   const [localCertType, setLocalCertType] = useState('PrimusGFS');
+  const [pendingW9, setPendingW9] = useState(null);
+  const [pendingCert, setPendingCert] = useState(null);
   const isGrower = role === 'grower';
   const isMissingDocs = isGrower ? (!myDocs.w9_url || !myDocs.cert_url) : (!myDocs.w9_url);
 
@@ -103,12 +105,13 @@ const ComplianceCard = ({ myDocs, handleDocUpload, role }) => {
           <strong style={{color: '#0ea5e9'}}> W-9 is strictly required to purchase. Vendor Packet is optional.</strong>
         )}
       </p>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
         <div style={{ background: 'white', padding: '20px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
           <h4 style={{ margin: '0 0 10px 0' }}>W-9 Form <span style={{color: '#991b1b', fontSize: '12px'}}>*Required</span></h4>
           {myDocs.w9_url ? ( <p style={{ color: '#0ea5e9', fontWeight: 'bold', margin: '0 0 10px 0' }}>✅ Uploaded (<a href={fixImageUrl(myDocs.w9_url)} target="_blank" rel="noreferrer" style={{ color: '#0ea5e9' }}>View</a>)</p> ) : ( <p style={{ color: '#991b1b', margin: '0 0 10px 0', fontWeight: 'bold' }}>❌ Missing Document</p> )}
-          <form onSubmit={(e) => handleDocUpload(e, 'w9')} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <input type="file" id="file-w9" className="modern-input" accept="image/jpeg, image/png, image/jpg, application/pdf" style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer' }} />
+          <form onSubmit={async (e) => { await handleDocUpload(e, 'w9'); setPendingW9(null); }} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <input type="file" id="file-w9" className="modern-input" accept="image/jpeg, image/png, image/jpg, application/pdf" onChange={(e) => setPendingW9(e.target.files[0])} style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer' }} />
+            {pendingW9 && <div style={{ fontSize: '12px', color: '#d97706', fontWeight: 'bold' }}>📎 Selected: {pendingW9.name}</div>}
             <button type="submit" className="btn-primary" style={{ padding: '8px 15px', background: '#0f172a', color: 'white', border: 'none', borderRadius: '6px' }}>Save W-9</button>
           </form>
         </div>
@@ -122,7 +125,7 @@ const ComplianceCard = ({ myDocs, handleDocUpload, role }) => {
           ) : ( 
             <p style={{ color: isGrower ? '#991b1b' : '#64748b', margin: '0 0 10px 0', fontWeight: 'bold' }}>{isGrower ? '❌ Missing Document' : 'No Document Uploaded'}</p> 
           )}
-          <form onSubmit={(e) => handleDocUpload(e, 'cert', isGrower ? localCertType : 'Vendor Packet')} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <form onSubmit={async (e) => { await handleDocUpload(e, 'cert', isGrower ? localCertType : 'Vendor Packet'); setPendingCert(null); }} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {isGrower && (
               <select value={localCertType} onChange={e => setLocalCertType(e.target.value)} className="modern-input" style={{ padding: '8px' }}>
                 <option value="PrimusGFS">PrimusGFS</option>
@@ -132,7 +135,8 @@ const ComplianceCard = ({ myDocs, handleDocUpload, role }) => {
                 <option value="Other">Other</option>
               </select>
             )}
-            <input type="file" id="file-cert" className="modern-input" accept="image/jpeg, image/png, image/jpg, application/pdf" style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer' }} />
+            <input type="file" id="file-cert" className="modern-input" accept="image/jpeg, image/png, image/jpg, application/pdf" onChange={(e) => setPendingCert(e.target.files[0])} style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer' }} />
+            {pendingCert && <div style={{ fontSize: '12px', color: '#d97706', fontWeight: 'bold' }}>📎 Selected: {pendingCert.name}</div>}
             <button type="submit" className="btn-primary" style={{ padding: '8px 15px', background: '#0f172a', color: 'white', border: 'none', borderRadius: '6px' }}>{isGrower ? 'Save Certificate' : 'Save Document'}</button>
           </form>
         </div>
