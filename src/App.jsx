@@ -483,13 +483,13 @@ const handleDismissRequest = async (id) => {
   const refreshMyListings = () => { fetch(`${API_URL}/api/my-listings/${userId}`).then(r => r.json()).then(d => { if(d.success) setMyListings(d.listings) }); };
   const fetchMyDocs = () => { fetch(`${API_URL}/api/my-docs/${userId}`).then(r => r.json()).then(d => { if(d.success) setMyDocs(d.docs) }); };
   
-  const fetchAdminData = () => {
+ const fetchAdminData = () => {
     fetch(`${API_URL}/api/admin-dashboard`).then(r => r.json()).then(d => { if(d.success) setAdminStats(d); });
     fetch(`${API_URL}/api/admin-users`).then(r => r.json()).then(d => { if(d.success) setAdminUsers(d.users); });
     fetch(`${API_URL}/api/admin-orders`).then(r => r.json()).then(d => { if(d.success) setAdminUnpaidOrders(d.orders); }); 
     fetch(`${API_URL}/api/admin-listings`).then(r => r.json()).then(d => { if(d.success) setAdminListings(d.listings); }); 
+    fetch(`${API_URL}/api/admin-requests`).then(r => r.json()).then(d => { if(d.success) setAdminRequests(d.requests); });
   };
-  fetch(`${API_URL}/api/admin-requests`).then(r => r.json()).then(d => { if(d.success) setAdminRequests(d.requests); });
 
   useEffect(() => {
     if (view === 'cooler') { fetch(`${API_URL}/api/live-cooler`).then(res => res.json()).then(data => { if(data.success) setCoolerData(data.data) }); }
@@ -598,10 +598,15 @@ const handleDismissRequest = async (id) => {
                   paca_number: e.target.paca.value
                 };
                 try {
-                  await fetch(`${API_URL}/api/request-invite`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                  alert('Request submitted securely! HQ will review your credentials and contact you shortly.'); 
-                  setShowInviteModal(false); 
-                } catch(err) { alert('Server error'); }
+                  const res = await fetch(`${API_URL}/api/request-invite`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                  const data = await res.json();
+                  if (data.success) {
+                    alert('Request submitted securely! HQ will review your credentials.'); 
+                    setShowInviteModal(false); 
+                  } else {
+                    alert('Server rejected the request. Wait a minute and try again.');
+                  }
+                } catch(err) { alert('Network error. Is the server online?'); }
               }} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
                 <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Company Name</label><input name="company" type="text" required className="modern-input" placeholder="e.g., Sunview Vineyards" /></div>
                 <div><label style={{ display: 'block', marginBottom: '5px', fontSize: '13px', fontWeight: 'bold' }}>Contact Name</label><input name="contact" type="text" required className="modern-input" placeholder="First and Last Name" /></div>
