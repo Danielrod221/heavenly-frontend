@@ -1,4 +1,4 @@
-/* 1. Reset the massive default padding so iPhones have room to breathe */
+/* 1. Reset the massive default padding */
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -6,41 +6,54 @@
   width: 100%;
 }
 
-/* 2. The main container that holds your map and inventory */
+/* 2. The main container */
 .dashboard-container {
   display: flex;
   flex-direction: row; 
+  flex: 1;
   gap: 20px;
+  padding: 0 20px 20px 20px;
+  overflow: hidden; /* Desktop: keeps things neat, only lists scroll */
 }
 
 /* 3. The Map Section */
 .map-section {
   flex: 2; 
-  min-height: 400px; 
+  position: relative;
+  border-radius: 12px;
+  border: 2px solid #1e293b;
+  overflow: hidden;
+  box-shadow: inset 0 0 100px rgba(56, 189, 248, 0.4);
 }
 
 /* 4. The Inventory Section */
 .inventory-section {
   flex: 1; 
   min-width: 400px;
+  overflow-y: auto;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid #1e293b;
+  border-radius: 12px;
 }
 
-/* 📱 THE MOBILE MAGIC: When the screen gets smaller than an iPad... */
+/* 📱 THE MOBILE MAGIC: Stacking and Scrolling */
 @media (max-width: 768px) {
   .dashboard-container {
     flex-direction: column; 
-    padding: 0 5px 10px 5px !important; /* Gives the screen edges a little breathing room */
+    padding: 0 5px 10px 5px !important; 
+    overflow-y: auto !important; /* Let the whole screen scroll on mobile! */
   }
   
   .inventory-section {
     min-width: 100%; 
+    overflow-y: visible !important; 
   }
 
   .map-section {
-    flex: none; /* Stops the iPhone from squishing the map */
-    height: 400px; /* Forces the map to be exactly this tall */
-    min-height: 400px;
+    flex: none; 
+    height: 400px !important; /* Safari Sledgehammer: Force exactly 400px */
+    min-height: 400px !important;
     width: 100%;
-    margin-bottom: 15px; /* Adds space between map and inventory */
+    margin-bottom: 15px; 
   }
 }
