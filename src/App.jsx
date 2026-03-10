@@ -444,7 +444,23 @@ const handleDismissRequest = async (id) => {
       if (data.success) { alert(`Offer for ${qty} pallet(s) sent to the grower!`); setOfferingPalletId(null); setMakeOfferAmount(''); fetchTradingFloor(); }
     } catch(err) { alert('Failed to send offer.'); }
   };
-
+const handleConnectBank = async () => {
+    try {
+      const res = await fetch(`${API_URL}/api/stripe/onboard`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ grower_id: userId })
+      });
+      const data = await res.json();
+      if (data.success && data.url) {
+        window.location.href = data.url; // Redirects them to Stripe's secure portal
+      } else {
+        alert("Failed to initialize secure banking connection.");
+      }
+    } catch (err) {
+      alert('Network error connecting to payment server.');
+    }
+  };
   const handleCashOut = async () => {
     if (!growerData || !growerData.available_balance || growerData.available_balance <= 0) {
       return alert("Your available balance is $0.00. Wait for buyers to pay their invoices before cashing out.");
@@ -992,9 +1008,17 @@ const handleDismissRequest = async (id) => {
                 <div className="card hide-on-print" style={{ padding: '30px', background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)', color: 'white', border: '1px solid #334155' }}>
                   <p style={{ color: '#94a3b8', fontWeight: '600', margin: '0 0 5px 0' }}>Available to Cash Out</p>
                   <h2 style={{ fontSize: '42px', color: '#4ade80', margin: '0 0 20px 0' }}>${growerData.available_balance || '0.00'}</h2>
-                  <button id="cash-out-btn" onClick={handleCashOut} style={{ background: '#4ade80', color: '#0f172a', border: 'none', padding: '12px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', width: '100%', fontSize: '15px', boxShadow: '0 4px 15px rgba(74, 222, 128, 0.2)', transition: 'all 0.2s' }}>
-                    💸 Withdraw to Bank
-                  </button>
+                  
+                  {!growerData.stripe_account_id ? (
+                    <button onClick={handleConnectBank} style={{ background: '#3b82f6', color: 'white', border: 'none', padding: '12px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', width: '100%', fontSize: '15px', boxShadow: '0 4px 15px rgba(59, 130, 246, 0.4)', transition: 'all 0.2s' }}>
+                      🏦 Link Bank Account
+                    </button>
+                  ) : (
+                    <button id="cash-out-btn" onClick={handleCashOut} style={{ background: '#4ade80', color: '#0f172a', border: 'none', padding: '12px 20px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', width: '100%', fontSize: '15px', boxShadow: '0 4px 15px rgba(74, 222, 128, 0.2)', transition: 'all 0.2s' }}>
+                      💸 Withdraw to Bank
+                    </button>
+                  )}
+
                 </div>
                 <div className="card" style={{ padding: '30px', background: 'rgba(255, 255, 255, 0.95)', border: '1px solid #e2e8f0' }}>
                   <p style={{ color: '#64748b', fontWeight: '600', margin: '0 0 5px 0' }}>Lifetime Sales Revenue</p>
@@ -1206,7 +1230,7 @@ const handleDismissRequest = async (id) => {
             
             <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', minHeight: '450px', width: '100%', background: '#020617', zIndex: 1, position: 'relative' }} zoomControl={false}>
               <MapController center={mapCenter} zoom={mapZoom} />
-              <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
+              <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="© Esri" />
               <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
               <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}" />
               {userLocation && (<Marker position={userLocation} icon={userIcon}><Popup><div style={{ fontWeight: 'bold', color: '#0f172a' }}>📍 You Are Here</div></Popup></Marker>)}
@@ -1294,21 +1318,21 @@ const handleDismissRequest = async (id) => {
                       {token ? (
                         role === 'buyer' && (
                           offeringPalletId === pallet.id ? (
-                            <div style={{ display: 'flex', gap: '5px' }} onClick={e => e.stopPropagation()}>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '10px' }}>
-    <label style={{ color: '#94a3b8', fontSize: '12px', fontWeight: 'bold' }}>Offer Price ($ Per Box):</label>
-    <input 
-        type="number" 
-        step="0.01" 
-        value={makeOfferAmount} 
-        onChange={e => setMakeOfferAmount(e.target.value)} 
-        className="modern-input" 
-        style={{ background: '#020617', color: 'white', borderColor: '#334155', padding: '6px' }} 
-        placeholder="$ per box" 
-    />
-</div>
-                              <button onClick={() => handleMakeOffer(pallet.id, pallet.grower_id)} className="btn-primary" style={{ width: 'auto', padding: '6px 10px', background: '#38bdf8', color: '#0f172a', fontSize: '12px' }}>Send</button>
-                              <button onClick={() => setOfferingPalletId(null)} className="btn-secondary" style={{ color: '#94a3b8', fontSize: '12px', padding: '6px' }}>X</button>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }} onClick={e => e.stopPropagation()}>
+                              <label style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold' }}>Offer Price ($ Per Box):</label>
+                              <div style={{ display: 'flex', gap: '5px' }}>
+                                <input 
+                                    type="number" 
+                                    step="0.01" 
+                                    value={makeOfferAmount} 
+                                    onChange={e => setMakeOfferAmount(e.target.value)} 
+                                    className="modern-input" 
+                                    style={{ flex: 1, background: '#020617', color: 'white', borderColor: '#334155', padding: '6px 10px' }} 
+                                    placeholder="$ per box" 
+                                />
+                                <button onClick={() => handleMakeOffer(pallet.id, pallet.grower_id)} className="btn-primary" style={{ width: 'auto', padding: '6px 15px', background: '#38bdf8', color: '#0f172a', fontSize: '12px', fontWeight: 'bold' }}>Send</button>
+                                <button onClick={() => setOfferingPalletId(null)} className="btn-secondary" style={{ background: '#1e293b', border: '1px solid #334155', color: '#94a3b8', fontSize: '12px', padding: '6px 12px', fontWeight: 'bold' }}>✕</button>
+                              </div>
                             </div>
                           ) : (
                             <button onClick={(e) => { e.stopPropagation(); setOfferingPalletId(pallet.id); }} style={{ width: '100%', padding: '8px', background: 'transparent', border: '1px dashed #38bdf8', color: '#38bdf8', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>🤝 Make an Offer</button>
