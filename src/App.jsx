@@ -480,10 +480,15 @@ const handleConnectBank = async () => {
         body: JSON.stringify({ grower_id: userId })
       });
       const data = await res.json();
+      
       if (data.success) {
         alert("💸 Transfer Initiated! Your funds will arrive in your linked bank account in 1-2 business days.");
         fetch(`${API_URL}/api/grower-dashboard/${userId}`).then(res => res.json()).then(data => { if(data.success) setGrowerData(data) });
+      } else {
+        // 🚨 ADDED THIS: Now the app will pop up and tell us EXACTLY why Stripe rejected it
+        alert("🛑 Transfer Failed: " + data.message);
       }
+      
     } catch (err) { 
       alert("Failed to process transfer."); 
     } finally {
