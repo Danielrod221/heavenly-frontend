@@ -923,17 +923,17 @@ const handleAddPallet = async (e) => {
                     <div style={{ display: 'flex', gap: '15px', background: '#f8fafc', padding: '15px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                       <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '10px' }}>
   <div>
-    <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>📍 Exact Street Address</label>
-    <input type="text" required value={newAddress} onChange={e => setNewAddress(e.target.value)} className="modern-input" placeholder="e.g. 123 Cold Storage Way" />
+    <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>📍 Exact Street Address (No City/State)</label>
+    <input type="text" required value={newAddress} onChange={e => setNewAddress(e.target.value)} className="modern-input" placeholder="e.g. 8507 Road 256" />
   </div>
   <div style={{ display: 'flex', gap: '10px' }}>
     <div style={{ flex: 2 }}>
       <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>City</label>
-      <input type="text" required value={newCity} onChange={e => setNewCity(e.target.value)} className="modern-input" placeholder="e.g. Fresno" />
+      <input type="text" required value={newCity} onChange={e => setNewCity(e.target.value)} className="modern-input" placeholder="e.g. Terra Bella" />
     </div>
     <div style={{ flex: 1 }}>
       <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>State</label>
-      <input type="text" required value={newStateLoc} onChange={e => setNewStateLoc(e.target.value)} className="modern-input" placeholder="CA" />
+      <input type="text" required value={newStateLoc} onChange={e => setNewStateLoc(e.target.value)} className="modern-input" placeholder="e.g. CA" maxLength="2" />
     </div>
   </div>
 </div>
