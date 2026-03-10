@@ -991,35 +991,41 @@ const handleDismissRequest = async (id) => {
                       </div>
                     </div>
                     
-                    <div style={{ display: 'flex', gap: '15px', background: '#f8fafc', padding: '15px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-                      <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '10px' }}>
-  <div>
-    <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>📍 Exact Street Address (No City/State)</label>
-    <input type="text" required value={newAddress} onChange={e => setNewAddress(e.target.value)} className="modern-input" placeholder="e.g. 8507 Road 256" />
-  </div>
-  <div style={{ display: 'flex', gap: '10px' }}>
-    <div style={{ flex: 2 }}>
-      <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>City</label>
-      <input type="text" required value={newCity} onChange={e => setNewCity(e.target.value)} className="modern-input" placeholder="e.g. Terra Bella" />
-    </div>
-    <div style={{ flex: 1 }}>
-      <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>State</label>
-      <input type="text" required value={newStateLoc} onChange={e => setNewStateLoc(e.target.value)} className="modern-input" placeholder="e.g. CA" maxLength="2" />
-    </div>
-  </div>
-</div>
-                      
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500', color: '#0ea5e9' }}>🕒 Loading Hours</label>
-                        <select required value={newLoadingWindow} onChange={e => setNewLoadingWindow(e.target.value)} className="modern-input" style={{ width: '100%' }}>
-                          <option value="Mon-Fri: 8:00 AM - 4:00 PM">Mon-Fri: 8:00 AM - 4:00 PM</option>
-                          <option value="Mon-Fri: 6:00 AM - 2:00 PM">Mon-Fri: 6:00 AM - 2:00 PM</option>
-                          <option value="Mon-Sat: 8:00 AM - 4:00 PM">Mon-Sat: 8:00 AM - 4:00 PM</option>
-                          <option value="Mon-Sat: 7:00 AM - 3:00 PM">Mon-Sat: 7:00 AM - 3:00 PM</option>
-                          <option value="7 Days a Week: 8:00 AM - 4:00 PM">7 Days a Week: 8:00 AM - 4:00 PM</option>
-                          <option value="By Appointment Only">By Appointment Only</option>
-                        </select>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', background: '#f8fafc', padding: '15px', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                      <div style={{ flex: '1 1 250px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div>
+                          <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>📍 Exact Street Address (No City/State)</label>
+                          <input type="text" required value={newAddress} onChange={e => setNewAddress(e.target.value)} className="modern-input" placeholder="e.g. 8507 Road 256" />
+                        </div>
+                        <div style={{ display: 'flex', gap: '10px' }}>
+                          <div style={{ flex: 2 }}>
+                            <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>City</label>
+                            <input type="text" required value={newCity} onChange={e => setNewCity(e.target.value)} className="modern-input" placeholder="e.g. Terra Bella" />
+                          </div>
+                          <div style={{ flex: 1 }}>
+                            <label style={{ display: 'block', marginBottom: '5px', fontSize: '12px', fontWeight: 'bold', color: '#0ea5e9' }}>State</label>
+                            <input type="text" required value={newStateLoc} onChange={e => setNewStateLoc(e.target.value)} className="modern-input" placeholder="e.g. CA" maxLength="2" />
+                          </div>
+                        </div>
                       </div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500', color: '#0ea5e9' }}>❄️ Storage Temp</label><input type="text" required value={newStorageTemp} onChange={e => setNewStorageTemp(e.target.value)} className="modern-input" placeholder="e.g. 34°F" /></div>
+                      
+                      <div style={{ flex: '1 1 200px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <div>
+                          <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500', color: '#0ea5e9' }}>🕒 Loading Hours</label>
+                          <select required value={newLoadingWindow} onChange={e => setNewLoadingWindow(e.target.value)} className="modern-input" style={{ width: '100%' }}>
+                            <option value="Mon-Fri: 8:00 AM - 4:00 PM">Mon-Fri: 8:00 AM - 4:00 PM</option>
+                            <option value="Mon-Fri: 6:00 AM - 2:00 PM">Mon-Fri: 6:00 AM - 2:00 PM</option>
+                            <option value="Mon-Sat: 8:00 AM - 4:00 PM">Mon-Sat: 8:00 AM - 4:00 PM</option>
+                            <option value="Mon-Sat: 7:00 AM - 3:00 PM">Mon-Sat: 7:00 AM - 3:00 PM</option>
+                            <option value="7 Days a Week: 8:00 AM - 4:00 PM">7 Days a Week: 8:00 AM - 4:00 PM</option>
+                            <option value="By Appointment Only">By Appointment Only</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500', color: '#0ea5e9' }}>❄️ Storage Temp</label>
+                          <input type="text" required value={newStorageTemp} onChange={e => setNewStorageTemp(e.target.value)} className="modern-input" placeholder="e.g. 34°F" />
+                        </div>
+                      </div>
                     </div>
                     
                     <div style={{ display: 'flex', gap: '15px' }}>
@@ -1028,8 +1034,7 @@ const handleDismissRequest = async (id) => {
                     </div>
 
                     <button type="submit" className="btn-primary" style={{ marginTop: '10px', background: '#0ea5e9' }}>List Pallet in Cooler</button>
-                  </form>
-                </>
+                  </form>               </>
               )}
             </div>
           </div>
