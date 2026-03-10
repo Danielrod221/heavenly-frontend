@@ -963,24 +963,24 @@ const handleDismissRequest = async (id) => {
                 <>
                   <p style={{ color: '#64748b', marginBottom: '25px' }}>Upload your specs, a photo of the box, and a photo of the fruit.</p>
                   <form onSubmit={handleAddPallet} style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    <div style={{ display: 'flex', gap: '15px' }}>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Commodity (e.g. Grapes)</label><input type="text" required value={newCommodity} onChange={e => setNewCommodity(e.target.value)} className="modern-input" /></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Variety</label><input type="text" value={newVariety} onChange={e => setNewVariety(e.target.value)} className="modern-input" /></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Brand</label><input type="text" value={newBrand} onChange={e => setNewBrand(e.target.value)} className="modern-input" placeholder="e.g. Sunview" /></div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Commodity (e.g. Grapes)</label><input type="text" required value={newCommodity} onChange={e => setNewCommodity(e.target.value)} className="modern-input" /></div>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Variety</label><input type="text" value={newVariety} onChange={e => setNewVariety(e.target.value)} className="modern-input" /></div>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Brand</label><input type="text" value={newBrand} onChange={e => setNewBrand(e.target.value)} className="modern-input" placeholder="e.g. Sunview" /></div>
                     </div>
-                    <div style={{ display: 'flex', gap: '15px' }}>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Pack Style</label><input type="text" value={newPackStyle} onChange={e => setNewPackStyle(e.target.value)} className="modern-input" /></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Weight</label><input type="text" value={newWeight} onChange={e => setNewWeight(e.target.value)} className="modern-input" /></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Size (e.g. 88s)</label><input type="text" value={newSize} onChange={e => setNewSize(e.target.value)} className="modern-input" /></div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Pack Style</label><input type="text" value={newPackStyle} onChange={e => setNewPackStyle(e.target.value)} className="modern-input" /></div>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Weight</label><input type="text" value={newWeight} onChange={e => setNewWeight(e.target.value)} className="modern-input" /></div>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Size (e.g. 88s)</label><input type="text" value={newSize} onChange={e => setNewSize(e.target.value)} className="modern-input" /></div>
                     </div>
-                    <div style={{ display: 'flex', gap: '15px' }}>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Total Pallets Available</label><input type="number" required value={newPalletsAvailable} onChange={e => setNewPalletsAvailable(e.target.value)} className="modern-input" /></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Boxes per Pallet</label><input type="number" required value={newBoxesPerPallet} onChange={e => setNewBoxesPerPallet(e.target.value)} className="modern-input" placeholder="e.g. 54" /></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Asking Price ($/box)</label><input type="number" step="0.01" required value={newPrice} onChange={e => setNewPrice(e.target.value)} className="modern-input" /></div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Total Pallets Available</label><input type="number" required value={newPalletsAvailable} onChange={e => setNewPalletsAvailable(e.target.value)} className="modern-input" /></div>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Boxes per Pallet</label><input type="number" required value={newBoxesPerPallet} onChange={e => setNewBoxesPerPallet(e.target.value)} className="modern-input" placeholder="e.g. 54" /></div>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Asking Price ($/box)</label><input type="number" step="0.01" required value={newPrice} onChange={e => setNewPrice(e.target.value)} className="modern-input" /></div>
                     </div>
-                    <div style={{ display: 'flex', gap: '15px' }}>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Grade</label><select value={newGrade} onChange={e => setNewGrade(e.target.value)} className="modern-input" style={{ width: '100%' }}><option value="Fancy">Fancy</option><option value="Combo">Combo</option><option value="Choice">Choice</option><option value="Premium">Premium</option><option value="Standard">Standard</option></select></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>💳 Payment Terms</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>Grade</label><select value={newGrade} onChange={e => setNewGrade(e.target.value)} className="modern-input" style={{ width: '100%' }}><option value="Fancy">Fancy</option><option value="Combo">Combo</option><option value="Choice">Choice</option><option value="Premium">Premium</option><option value="Standard">Standard</option></select></div>
+                      <div style={{ flex: '1 1 140px' }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>💳 Payment Terms</label>
                         <select value={newPaymentTerms} onChange={e => setNewPaymentTerms(e.target.value)} className="modern-input" style={{ width: '100%' }}>
                           <option value="Net 7">Net 7</option>
                           <option value="Net 14">Net 14</option>
@@ -1028,12 +1028,27 @@ const handleDismissRequest = async (id) => {
                       </div>
                     </div>
                     
-                    <div style={{ display: 'flex', gap: '15px' }}>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>📦 Upload Box Photo</label><input type="file" id="file-box" className="modern-input" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={e => setNewPhotoFile(e.target.files[0])} style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer' }} /></div>
-                      <div style={{ flex: 1 }}><label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>🍇 Upload Fruit Photo</label><input type="file" id="file-fruit" className="modern-input" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={e => setNewPhotoFile2(e.target.files[0])} style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer' }} /></div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+                      <div style={{ flex: '1 1 200px' }}>
+                        <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>📦 Upload Box Photo</label>
+                        <input type="file" id="file-box" className="modern-input" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={e => setNewPhotoFile(e.target.files[0])} style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer', width: '100%' }} />
+                        {newPhotoFile && <div style={{ marginTop: '5px', fontSize: '12px', color: '#166534', fontWeight: 'bold' }}>✅ Attached: {newPhotoFile.name}</div>}
+                      </div>
+                      <div style={{ flex: '1 1 200px' }}>
+                        <label style={{ display: 'block', marginBottom: '5px', fontSize: '14px', fontWeight: '500' }}>🍇 Upload Fruit Photo</label>
+                        <input type="file" id="file-fruit" className="modern-input" accept="image/jpeg, image/png, image/jpg, image/webp" onChange={e => setNewPhotoFile2(e.target.files[0])} style={{ padding: '8px', background: '#f8fafc', cursor: 'pointer', width: '100%' }} />
+                        {newPhotoFile2 && <div style={{ marginTop: '5px', fontSize: '12px', color: '#166534', fontWeight: 'bold' }}>✅ Attached: {newPhotoFile2.name}</div>}
+                      </div>
                     </div>
 
-                    <button type="submit" className="btn-primary" style={{ marginTop: '10px', background: '#0ea5e9' }}>List Pallet in Cooler</button>
+                    <button id="submit-pallet-btn" type="submit" className="btn-primary" onClick={() => { 
+                      if (newCommodity && newPalletsAvailable && newBoxesPerPallet && newPrice && newPhotoFile && newPhotoFile2) {
+                        const btn = document.getElementById('submit-pallet-btn');
+                        btn.innerText = '⏳ Uploading to Cloud... Please wait.';
+                        btn.style.opacity = '0.7';
+                        btn.style.pointerEvents = 'none';
+                      }
+                    }} style={{ marginTop: '10px', background: '#0ea5e9', transition: 'all 0.3s' }}>List Pallet in Cooler</button>
                   </form>               </>
               )}
             </div>
