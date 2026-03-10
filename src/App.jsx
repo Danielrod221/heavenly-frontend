@@ -1104,7 +1104,18 @@ function App() {
                         role === 'buyer' && (
                           offeringPalletId === pallet.id ? (
                             <div style={{ display: 'flex', gap: '5px' }} onClick={e => e.stopPropagation()}>
-                              <input type="number" step="0.01" value={makeOfferAmount} onChange={e => setMakeOfferAmount(e.target.value)} className="modern-input" style={{ background: '#020617', color: 'white', borderColor: '#334155', padding: '6px' }} placeholder="$" />
+  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginBottom: '10px' }}>
+    <label style={{ color: '#94a3b8', fontSize: '12px', fontWeight: 'bold' }}>Offer Price ($ Per Box):</label>
+    <input 
+        type="number" 
+        step="0.01" 
+        value={makeOfferAmount} 
+        onChange={e => setMakeOfferAmount(e.target.value)} 
+        className="modern-input" 
+        style={{ background: '#020617', color: 'white', borderColor: '#334155', padding: '6px' }} 
+        placeholder="$ per box" 
+    />
+</div>
                               <button onClick={() => handleMakeOffer(pallet.id, pallet.grower_id)} className="btn-primary" style={{ width: 'auto', padding: '6px 10px', background: '#38bdf8', color: '#0f172a', fontSize: '12px' }}>Send</button>
                               <button onClick={() => setOfferingPalletId(null)} className="btn-secondary" style={{ color: '#94a3b8', fontSize: '12px', padding: '6px' }}>X</button>
                             </div>
