@@ -523,6 +523,7 @@ function App() {
     );
   };
 
+  // --- 1. LOGIN VIEW ---
   if (view === 'login') {
     return (
       <PageWrapper>
@@ -589,6 +590,7 @@ function App() {
     );
   }
 
+  // --- 2. ADMIN VIEW ---
   if (view === 'admin') {
     return (
       <PageWrapper>
@@ -665,6 +667,7 @@ function App() {
     );
   }
 
+  // --- 3. ORDERS VIEW (BUYER DASHBOARD) ---
   if (view === 'orders') {
     return (
       <PageWrapper>
@@ -786,139 +789,7 @@ function App() {
     );
   }
 
-  if (view === 'cooler') {
-    const displayedPallets = selectedMapLocation ? coolerData.filter(p => p.location === selectedMapLocation) : coolerData;
-    return (
-      <PageWrapper>
-        {renderLightbox()}
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', background: '#020617' }}>
-          <Navbar title="Command Center" role={role} view={view} setView={setView} handleLogout={handleLogout} token={token} />
-          
-          <div className="dashboard-container" style={{ flex: 1, padding: '0 20px 20px 20px', overflow: 'hidden' }}>
-            <div className="map-section" style={{ backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.6), rgba(15, 23, 42, 0.8)), url('${satelliteMapUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '12px', border: '2px solid #1e293b', position: 'relative', overflow: 'hidden', boxShadow: 'inset 0 0 100px rgba(56, 189, 248, 0.4)' }}>
-              <div style={{ position: 'absolute', top: '50%', left: '50%', width: '200%', height: '200%', background: 'conic-gradient(from 0deg, transparent 70%, rgba(56, 189, 248, 0.3) 100%)', transform: 'translate(-50%, -50%)', borderRadius: '50%', animation: 'spin 4s linear infinite', pointerEvents: 'none', zIndex: 1000 }} />
-              <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(15,23,42,0.85)', padding: '15px', borderRadius: '8px', border: '1px solid #334155', color: '#f8fafc', zIndex: 2000, boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
-                <h3 style={{ margin: 0, fontSize: '14px', color: '#38bdf8', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%', boxShadow: '0 0 10px #4ade80' }}></span>LIVE SATELLITE GRID</h3>
-                <p style={{ margin: '5px 0 10px 0', fontSize: '12px', color: '#94a3b8' }}>Select a pin to view isolated inventory.</p>
-                <button onClick={locateUser} className="btn-primary" style={{ background: '#0ea5e9', fontSize: '11px', padding: '6px 10px', width: '100%', marginBottom: selectedMapLocation ? '10px' : '0' }}>📡 Scan My Location</button>
-                {selectedMapLocation && (<button onClick={() => setSelectedMapLocation(null)} style={{ background: 'transparent', border: '1px dashed #ef4444', color: '#ef4444', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'block' }}>✕ Clear Filter</button>)}
-              </div>
-              <MapContainer center={mapCenter} zoom={mapZoom}  zoomControl=style={{ height: '400px', minHeight: '400px', width: '100%', background: '#020617', zIndex: 1 }}{false}>
-                <MapController center={mapCenter} zoom={mapZoom} />
-                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
-                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
-                <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}" />
-                {userLocation && (<Marker position={userLocation} icon={userIcon}><Popup><div style={{ fontWeight: 'bold', color: '#0f172a' }}>📍 You Are Here</div></Popup></Marker>)}
-                {uniqueLocations.map((loc, i) => {
-                  const isSelected = selectedMapLocation === loc.name;
-                  if (!loc.lat || !loc.lon) return null;
-                  return (
-                    <Marker key={i} position={[loc.lat, loc.lon]} icon={createHudIcon(isSelected)} eventHandlers={{ click: () => { setSelectedMapLocation(loc.name); setMapCenter([loc.lat, loc.lon]); setMapZoom(14); } }}>
-                      <Popup><div style={{ fontWeight: 'bold', color: '#0f172a', marginBottom: '5px' }}>{loc.name}</div><div style={{ color: '#0ea5e9', fontSize: '12px' }}>{loc.count} Pallet(s) Available</div></Popup>
-                    </Marker>
-                  );
-                })}
-              </MapContainer>
-            </div>
-
-            <div className="inventory-section" style={{ background: 'rgba(15, 23, 42, 0.6)', border: '1px solid #1e293b', borderRadius: '12px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <div style={{ padding: '20px', borderBottom: '1px solid #1e293b', background: '#0f172a' }}>
-                <h3 style={{ margin: 0, color: 'white', fontSize: '18px' }}>{selectedMapLocation ? `Inventory at Location` : 'All Available Inventory'}</h3>
-                <p style={{ margin: '5px 0 0 0', color: '#94a3b8', fontSize: '13px' }}>{displayedPallets.length} Pallets Found</p>
-              </div>
-              <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                {displayedPallets.map(pallet => (
-                  <div 
-                    key={pallet.id} 
-                    className="card" 
-                    onClick={() => { if (pallet.lat && pallet.lon) { setMapCenter([pallet.lat, pallet.lon]); setMapZoom(16); setSelectedMapLocation(pallet.location); } }}
-                    style={{ height: 'auto', minHeight: 'fit-content', display: 'flex', flexDirection: 'column', background: '#0f172a', border: '1px solid #334155', overflow: 'hidden', color: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', cursor: 'pointer', transition: 'border-color 0.2s' }}
-                    onMouseEnter={e => e.currentTarget.style.borderColor = '#38bdf8'}
-                    onMouseLeave={e => e.currentTarget.style.borderColor = '#334155'}
-                  >
-                    <div style={{ display: 'flex', height: '140px', width: '100%', background: '#020617', flexShrink: 0 }}>
-                      <img src={fixImageUrl(pallet.photo_url)} style={{ width: pallet.photo_url_2 ? '50%' : '100%', height: '100%', objectFit: 'cover', opacity: 0.9, cursor: 'zoom-in' }} onClick={(e) => { e.stopPropagation(); setExpandedImage(fixImageUrl(pallet.photo_url)); }} title="Click to zoom" />
-                      {pallet.photo_url_2 && <img src={fixImageUrl(pallet.photo_url_2)} style={{ width: '50%', height: '100%', objectFit: 'cover', borderLeft: '2px solid #0f172a', opacity: 0.9, cursor: 'zoom-in' }} onClick={(e) => { e.stopPropagation(); setExpandedImage(fixImageUrl(pallet.photo_url_2)); }} title="Click to zoom" />}
-                    </div>
-                    <div style={{ padding: '20px', flex: 1 }}>
-                      <h2 style={{ margin: '0 0 5px 0', color: '#f8fafc', fontSize: '18px' }}>
-                        {pallet.commodity_type} {pallet.variety && `- ${pallet.variety}`}
-                        {pallet.grade && <span style={{ fontSize: '10px', background: '#1e293b', border: '1px solid #334155', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '8px', fontWeight: '600', color: '#cbd5e1' }}>{pallet.grade}</span>}
-                      </h2>
-                      <div style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
-                        🏢 HT Verified Grower <span style={{ background: '#dcfce3', color: '#166534', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>✓ CERT: {pallet.cert_type ? pallet.cert_type.toUpperCase() : 'DOCS'}</span>
-                      </div>
-                      
-                      <p style={{ margin: '0 0 15px 0', color: '#e2e8f0', fontSize: '15px', fontWeight: 'bold' }}>
-                        {pallet.pallets_available} Pallet(s) Available <span style={{ color: '#94a3b8', fontSize: '13px', fontWeight: 'normal' }}>({pallet.boxes_per_pallet} boxes/pallet)</span>
-                      </p>
-                      
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '15px', color: '#cbd5e1', fontSize: '13px', lineHeight: '1.4' }}>
-                        <span style={{ color: '#ef4444' }}>📍</span>
-                        <span style={{ fontWeight: '500' }}>{pallet.location}</span>
-                      </div>
-
-                      <div style={{ background: '#1e293b', borderRadius: '6px', padding: '10px', marginBottom: '15px', border: '1px solid #334155' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}><span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 'bold' }}>TERMS:</span><span style={{ color: '#4ade80', fontSize: '11px', fontWeight: 'bold' }}>{pallet.payment_terms}</span></div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}><span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 'bold' }}>TEMP:</span><span style={{ color: '#e2e8f0', fontSize: '11px' }}>{pallet.storage_temp || 'N/A'}</span></div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 'bold' }}>HOURS:</span><span style={{ color: pallet.loading_window === 'By Appointment Only' ? '#f59e0b' : '#e2e8f0', fontSize: '11px', fontWeight: pallet.loading_window === 'By Appointment Only' ? 'bold' : 'normal' }}>{pallet.loading_window}</span></div>
-                      </div>
-                      {pallet.loading_window === 'By Appointment Only' && (
-                        <div style={{ marginBottom: '15px', background: '#020617', padding: '10px', borderRadius: '6px', border: '1px dashed #f59e0b' }} onClick={e => e.stopPropagation()}>
-                          <label style={{ display: 'block', fontSize: '11px', color: '#f59e0b', fontWeight: 'bold', marginBottom: '5px' }}>📅 APPOINTMENT REQUIRED:</label>
-                          <input type="datetime-local" className="modern-input" style={{ padding: '6px', fontSize: '12px', width: '100%', background: '#0f172a', color: 'white', borderColor: '#334155' }} value={apptTimes[pallet.id] || ''} onChange={e => setApptTimes({...apptTimes, [pallet.id]: e.target.value})} />
-                        </div>
-                      )}
-                      
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
-                        <div>
-                          <span style={{ fontSize: '24px', fontWeight: '700', color: '#38bdf8' }}>${pallet.asking_price}</span> <span style={{ fontSize: '12px', color: '#94a3b8' }}>/ box</span>
-                        </div>
-                        {token ? (
-                          role === 'buyer' && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={e => e.stopPropagation()}>
-                              <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
-                                <label style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold' }}>QTY:</label>
-                                <input type="number" min="1" max={pallet.pallets_available} value={buyQty[pallet.id] || 1} onChange={e => setBuyQty({...buyQty, [pallet.id]: e.target.value})} className="modern-input" style={{ width: '40px', padding: '2px 4px', fontSize: '14px', background: '#0f172a', color: 'white', border: 'none', textAlign: 'center' }} />
-                              </div>
-                              <button onClick={() => handleBuy(pallet.id)} className="btn-primary" style={{ background: '#38bdf8', color: '#0f172a', width: 'auto', padding: '8px 15px', fontWeight: 'bold', fontSize: '13px' }}>Buy Now</button>
-                            </div>
-                          )
-                        ) : (
-                          <button onClick={(e) => { e.stopPropagation(); setView('login'); }} className="btn-primary" style={{ background: '#0f172a', color: '#38bdf8', border: '1px solid #38bdf8', width: 'auto', padding: '8px 20px', fontWeight: 'bold', fontSize: '13px' }}>Sign in to Buy</button>
-                        )}
-                      </div>
-
-                      <div style={{ borderTop: '1px solid #334155', paddingTop: '10px' }}>
-                        {token ? (
-                          role === 'buyer' && (
-                            offeringPalletId === pallet.id ? (
-                              <div style={{ display: 'flex', gap: '5px' }} onClick={e => e.stopPropagation()}>
-                                <input type="number" step="0.01" value={makeOfferAmount} onChange={e => setMakeOfferAmount(e.target.value)} className="modern-input" style={{ background: '#020617', color: 'white', borderColor: '#334155', padding: '6px' }} placeholder="$" />
-                                <button onClick={() => handleMakeOffer(pallet.id, pallet.grower_id)} className="btn-primary" style={{ width: 'auto', padding: '6px 10px', background: '#38bdf8', color: '#0f172a', fontSize: '12px' }}>Send</button>
-                                <button onClick={() => setOfferingPalletId(null)} className="btn-secondary" style={{ color: '#94a3b8', fontSize: '12px', padding: '6px' }}>X</button>
-                              </div>
-                            ) : (
-                              <button onClick={(e) => { e.stopPropagation(); setOfferingPalletId(pallet.id); }} style={{ width: '100%', padding: '8px', background: 'transparent', border: '1px dashed #38bdf8', color: '#38bdf8', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>🤝 Make an Offer</button>
-                            )
-                          )
-                        ) : (
-                          <button onClick={(e) => { e.stopPropagation(); setView('login'); }} style={{ width: '100%', padding: '8px', background: 'transparent', border: '1px dashed #64748b', color: '#94a3b8', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>🔒 Sign in to Make an Offer</button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {displayedPallets.length === 0 && (<div style={{ textAlign: 'center', color: '#94a3b8', marginTop: '40px' }}>No inventory available here.</div>)}
-              </div>
-            </div>
-
-          </div>
-        </div>
-      </PageWrapper>
-    );
-  }
-
+  // --- 4. DASHBOARD VIEW (GROWER) ---
   if (view === 'dashboard') {
     return (
       <PageWrapper>
@@ -1108,6 +979,138 @@ function App() {
     ); 
   }
 
-  return null;
+  // --- 5. DEFAULT PUBLIC VIEW (THE COOLER) ---
+  const displayedPallets = selectedMapLocation ? coolerData.filter(p => p.location === selectedMapLocation) : coolerData;
+  return (
+    <PageWrapper>
+      {renderLightbox()}
+      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: '#020617' }}>
+        <Navbar title="Command Center" role={role} view={view} setView={setView} handleLogout={handleLogout} token={token} />
+        
+        <div className="dashboard-container">
+          <div className="map-section" style={{ backgroundImage: `linear-gradient(rgba(2, 6, 23, 0.6), rgba(15, 23, 42, 0.8)), url('${satelliteMapUrl}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+            <div style={{ position: 'absolute', top: '50%', left: '50%', width: '200%', height: '200%', background: 'conic-gradient(from 0deg, transparent 70%, rgba(56, 189, 248, 0.3) 100%)', transform: 'translate(-50%, -50%)', borderRadius: '50%', animation: 'spin 4s linear infinite', pointerEvents: 'none', zIndex: 1000 }} />
+            <div style={{ position: 'absolute', top: '20px', left: '20px', background: 'rgba(15,23,42,0.85)', padding: '15px', borderRadius: '8px', border: '1px solid #334155', color: '#f8fafc', zIndex: 2000, boxShadow: '0 10px 20px rgba(0,0,0,0.5)' }}>
+              <h3 style={{ margin: 0, fontSize: '14px', color: '#38bdf8', letterSpacing: '1px', display: 'flex', alignItems: 'center', gap: '8px' }}><span style={{ display: 'inline-block', width: '8px', height: '8px', background: '#4ade80', borderRadius: '50%', boxShadow: '0 0 10px #4ade80' }}></span>LIVE SATELLITE GRID</h3>
+              <p style={{ margin: '5px 0 10px 0', fontSize: '12px', color: '#94a3b8' }}>Select a pin to view isolated inventory.</p>
+              <button onClick={locateUser} className="btn-primary" style={{ background: '#0ea5e9', fontSize: '11px', padding: '6px 10px', width: '100%', marginBottom: selectedMapLocation ? '10px' : '0' }}>📡 Scan My Location</button>
+              {selectedMapLocation && (<button onClick={() => setSelectedMapLocation(null)} style={{ background: 'transparent', border: '1px dashed #ef4444', color: '#ef4444', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', width: '100%', display: 'block' }}>✕ Clear Filter</button>)}
+            </div>
+            
+            <MapContainer center={mapCenter} zoom={mapZoom} style={{ height: '100%', width: '100%', background: '#020617', zIndex: 1 }} zoomControl={false}>
+              <MapController center={mapCenter} zoom={mapZoom} />
+              <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" attribution="&copy; Esri" />
+              <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}" />
+              <TileLayer url="https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Transportation/MapServer/tile/{z}/{y}/{x}" />
+              {userLocation && (<Marker position={userLocation} icon={userIcon}><Popup><div style={{ fontWeight: 'bold', color: '#0f172a' }}>📍 You Are Here</div></Popup></Marker>)}
+              {uniqueLocations.map((loc, i) => {
+                const isSelected = selectedMapLocation === loc.name;
+                if (!loc.lat || !loc.lon) return null;
+                return (
+                  <Marker key={i} position={[loc.lat, loc.lon]} icon={createHudIcon(isSelected)} eventHandlers={{ click: () => { setSelectedMapLocation(loc.name); setMapCenter([loc.lat, loc.lon]); setMapZoom(14); } }}>
+                    <Popup><div style={{ fontWeight: 'bold', color: '#0f172a', marginBottom: '5px' }}>{loc.name}</div><div style={{ color: '#0ea5e9', fontSize: '12px' }}>{loc.count} Pallet(s) Available</div></Popup>
+                  </Marker>
+                );
+              })}
+            </MapContainer>
+          </div>
+
+          <div className="inventory-section">
+            <div style={{ padding: '20px', borderBottom: '1px solid #1e293b', background: '#0f172a' }}>
+              <h3 style={{ margin: 0, color: 'white', fontSize: '18px' }}>{selectedMapLocation ? `Inventory at Location` : 'All Available Inventory'}</h3>
+              <p style={{ margin: '5px 0 0 0', color: '#94a3b8', fontSize: '13px' }}>{displayedPallets.length} Pallets Found</p>
+            </div>
+            <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {displayedPallets.map(pallet => (
+                <div 
+                  key={pallet.id} 
+                  className="card" 
+                  onClick={() => { if (pallet.lat && pallet.lon) { setMapCenter([pallet.lat, pallet.lon]); setMapZoom(16); setSelectedMapLocation(pallet.location); } }}
+                  style={{ height: 'auto', minHeight: 'fit-content', display: 'flex', flexDirection: 'column', background: '#0f172a', border: '1px solid #334155', overflow: 'hidden', color: 'white', boxShadow: '0 10px 30px rgba(0,0,0,0.5)', cursor: 'pointer', transition: 'border-color 0.2s' }}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = '#38bdf8'}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = '#334155'}
+                >
+                  <div style={{ display: 'flex', height: '140px', width: '100%', background: '#020617', flexShrink: 0 }}>
+                    <img src={fixImageUrl(pallet.photo_url)} style={{ width: pallet.photo_url_2 ? '50%' : '100%', height: '100%', objectFit: 'cover', opacity: 0.9, cursor: 'zoom-in' }} onClick={(e) => { e.stopPropagation(); setExpandedImage(fixImageUrl(pallet.photo_url)); }} title="Click to zoom" />
+                    {pallet.photo_url_2 && <img src={fixImageUrl(pallet.photo_url_2)} style={{ width: '50%', height: '100%', objectFit: 'cover', borderLeft: '2px solid #0f172a', opacity: 0.9, cursor: 'zoom-in' }} onClick={(e) => { e.stopPropagation(); setExpandedImage(fixImageUrl(pallet.photo_url_2)); }} title="Click to zoom" />}
+                  </div>
+                  <div style={{ padding: '20px', flex: 1 }}>
+                    <h2 style={{ margin: '0 0 5px 0', color: '#f8fafc', fontSize: '18px' }}>
+                      {pallet.commodity_type} {pallet.variety && `- ${pallet.variety}`}
+                      {pallet.grade && <span style={{ fontSize: '10px', background: '#1e293b', border: '1px solid #334155', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '8px', fontWeight: '600', color: '#cbd5e1' }}>{pallet.grade}</span>}
+                    </h2>
+                    <div style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+                      🏢 HT Verified Grower <span style={{ background: '#dcfce3', color: '#166534', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>✓ CERT: {pallet.cert_type ? pallet.cert_type.toUpperCase() : 'DOCS'}</span>
+                    </div>
+                    
+                    <p style={{ margin: '0 0 15px 0', color: '#e2e8f0', fontSize: '15px', fontWeight: 'bold' }}>
+                      {pallet.pallets_available} Pallet(s) Available <span style={{ color: '#94a3b8', fontSize: '13px', fontWeight: 'normal' }}>({pallet.boxes_per_pallet} boxes/pallet)</span>
+                    </p>
+                    
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '15px', color: '#cbd5e1', fontSize: '13px', lineHeight: '1.4' }}>
+                      <span style={{ color: '#ef4444' }}>📍</span>
+                      <span style={{ fontWeight: '500' }}>{pallet.location}</span>
+                    </div>
+
+                    <div style={{ background: '#1e293b', borderRadius: '6px', padding: '10px', marginBottom: '15px', border: '1px solid #334155' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}><span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 'bold' }}>TERMS:</span><span style={{ color: '#4ade80', fontSize: '11px', fontWeight: 'bold' }}>{pallet.payment_terms}</span></div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}><span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 'bold' }}>TEMP:</span><span style={{ color: '#e2e8f0', fontSize: '11px' }}>{pallet.storage_temp || 'N/A'}</span></div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between' }}><span style={{ color: '#38bdf8', fontSize: '11px', fontWeight: 'bold' }}>HOURS:</span><span style={{ color: pallet.loading_window === 'By Appointment Only' ? '#f59e0b' : '#e2e8f0', fontSize: '11px', fontWeight: pallet.loading_window === 'By Appointment Only' ? 'bold' : 'normal' }}>{pallet.loading_window}</span></div>
+                    </div>
+                    {pallet.loading_window === 'By Appointment Only' && (
+                      <div style={{ marginBottom: '15px', background: '#020617', padding: '10px', borderRadius: '6px', border: '1px dashed #f59e0b' }} onClick={e => e.stopPropagation()}>
+                        <label style={{ display: 'block', fontSize: '11px', color: '#f59e0b', fontWeight: 'bold', marginBottom: '5px' }}>📅 APPOINTMENT REQUIRED:</label>
+                        <input type="datetime-local" className="modern-input" style={{ padding: '6px', fontSize: '12px', width: '100%', background: '#0f172a', color: 'white', borderColor: '#334155' }} value={apptTimes[pallet.id] || ''} onChange={e => setApptTimes({...apptTimes, [pallet.id]: e.target.value})} />
+                      </div>
+                    )}
+                    
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+                      <div>
+                        <span style={{ fontSize: '24px', fontWeight: '700', color: '#38bdf8' }}>${pallet.asking_price}</span> <span style={{ fontSize: '12px', color: '#94a3b8' }}>/ box</span>
+                      </div>
+                      {token ? (
+                        role === 'buyer' && (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }} onClick={e => e.stopPropagation()}>
+                            <div style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', padding: '4px 8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                              <label style={{ color: '#94a3b8', fontSize: '11px', fontWeight: 'bold' }}>QTY:</label>
+                              <input type="number" min="1" max={pallet.pallets_available} value={buyQty[pallet.id] || 1} onChange={e => setBuyQty({...buyQty, [pallet.id]: e.target.value})} className="modern-input" style={{ width: '40px', padding: '2px 4px', fontSize: '14px', background: '#0f172a', color: 'white', border: 'none', textAlign: 'center' }} />
+                            </div>
+                            <button onClick={() => handleBuy(pallet.id)} className="btn-primary" style={{ background: '#38bdf8', color: '#0f172a', width: 'auto', padding: '8px 15px', fontWeight: 'bold', fontSize: '13px' }}>Buy Now</button>
+                          </div>
+                        )
+                      ) : (
+                        <button onClick={(e) => { e.stopPropagation(); setView('login'); }} className="btn-primary" style={{ background: '#0f172a', color: '#38bdf8', border: '1px solid #38bdf8', width: 'auto', padding: '8px 20px', fontWeight: 'bold', fontSize: '13px' }}>Sign in to Buy</button>
+                      )}
+                    </div>
+
+                    <div style={{ borderTop: '1px solid #334155', paddingTop: '10px' }}>
+                      {token ? (
+                        role === 'buyer' && (
+                          offeringPalletId === pallet.id ? (
+                            <div style={{ display: 'flex', gap: '5px' }} onClick={e => e.stopPropagation()}>
+                              <input type="number" step="0.01" value={makeOfferAmount} onChange={e => setMakeOfferAmount(e.target.value)} className="modern-input" style={{ background: '#020617', color: 'white', borderColor: '#334155', padding: '6px' }} placeholder="$" />
+                              <button onClick={() => handleMakeOffer(pallet.id, pallet.grower_id)} className="btn-primary" style={{ width: 'auto', padding: '6px 10px', background: '#38bdf8', color: '#0f172a', fontSize: '12px' }}>Send</button>
+                              <button onClick={() => setOfferingPalletId(null)} className="btn-secondary" style={{ color: '#94a3b8', fontSize: '12px', padding: '6px' }}>X</button>
+                            </div>
+                          ) : (
+                            <button onClick={(e) => { e.stopPropagation(); setOfferingPalletId(pallet.id); }} style={{ width: '100%', padding: '8px', background: 'transparent', border: '1px dashed #38bdf8', color: '#38bdf8', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>🤝 Make an Offer</button>
+                          )
+                        )
+                      ) : (
+                        <button onClick={(e) => { e.stopPropagation(); setView('login'); }} style={{ width: '100%', padding: '8px', background: 'transparent', border: '1px dashed #64748b', color: '#94a3b8', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold', fontSize: '13px' }}>🔒 Sign in to Make an Offer</button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {displayedPallets.length === 0 && (<div style={{ textAlign: 'center', color: '#94a3b8', marginTop: '40px' }}>No inventory available here.</div>)}
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </PageWrapper>
+  );
 }
+
 export default App;
