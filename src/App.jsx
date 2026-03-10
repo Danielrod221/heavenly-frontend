@@ -772,7 +772,7 @@ const handleAddPallet = async (e) => {
                     <div>
                       <h3 style={{ margin: '0 0 5px 0', color: '#0f172a' }}>
                         {order.purchased_pallets} Pallets of {order.commodity_type} <span style={{ fontWeight: 'normal', color: '#64748b' }}>({order.purchased_boxes} boxes)</span>
-                        <span style={{ fontSize: '12px', background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '6px', fontWeight: '600', color: '#475569' }}>{order.grade}</span>
+                        <span style={{ fontSize: '12px', background: '#e2e8f0', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '6px', fontWeight: '600', color: '#475569' }}>Grade: {order.grade}</span>
                       </h3>
                       <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>PO Number: <strong>{order.po_number}</strong> {order.brand && `| Brand: ${order.brand}`}</p>
                       <p style={{ margin: '5px 0 0 0', color: '#64748b', fontSize: '12px' }}>Date: {new Date(order.created_at).toLocaleDateString()}</p>
@@ -974,7 +974,7 @@ const handleAddPallet = async (e) => {
                 <h4 style={{ margin: '0 0 5px 0' }}>{pallet.commodity_type} {pallet.variety && `- ${pallet.variety}`}</h4>
                 
                 <p style={{ margin: '0 0 10px 0', fontSize: '12px', color: '#64748b' }}>
-                  {pallet.pack_style} • {pallet.weight} {pallet.size && <span style={{ color: '#0f172a', fontWeight: 'bold' }}>• Size: {pallet.size}</span>} <span style={{ background: '#e0f2fe', padding: '2px 4px', borderRadius: '4px', fontWeight: '600', marginLeft: '5px', color: '#0284c7' }}>{pallet.grade}</span>
+                  {pallet.pack_style} • {pallet.weight} {pallet.size && <span style={{ color: '#0f172a', fontWeight: 'bold' }}>• Size: {pallet.size}</span>} <span style={{ background: '#e0f2fe', padding: '2px 4px', borderRadius: '4px', fontWeight: '600', marginLeft: '5px', color: '#0284c7' }}>Grade: {pallet.grade}</span>
                 </p>
 
                 <p style={{ margin: '0 0 10px 0', fontSize: '12px', color: '#0f172a' }}>📍 {pallet.location}</p>
@@ -1079,7 +1079,7 @@ const handleAddPallet = async (e) => {
                   <div style={{ padding: '20px', flex: 1 }}>
                     <h2 style={{ margin: '0 0 5px 0', color: '#f8fafc', fontSize: '18px' }}>
                       {pallet.commodity_type} {pallet.variety && `- ${pallet.variety}`}
-                      {pallet.grade && <span style={{ fontSize: '10px', background: '#1e293b', border: '1px solid #334155', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '8px', fontWeight: '600', color: '#cbd5e1' }}>{pallet.grade}</span>}
+                      {pallet.grade && <span style={{ fontSize: '10px', background: '#1e293b', border: '1px solid #334155', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '8px', fontWeight: '600', color: '#cbd5e1' }}>Grade: {pallet.grade}</span>
                     </h2>
                     <div style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
                       🏢 HT Verified Grower <span style={{ background: '#dcfce3', color: '#166534', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>✓ CERT: {pallet.cert_type ? pallet.cert_type.toUpperCase() : 'DOCS'}</span>
