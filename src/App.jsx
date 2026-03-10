@@ -764,6 +764,14 @@ function App() {
                       <p style={{ margin: 0, color: '#64748b', fontSize: '14px' }}>PO Number: <strong>{order.po_number}</strong> {order.brand && `| Brand: ${order.brand}`}</p>
                       <p style={{ margin: '5px 0 0 0', color: '#64748b', fontSize: '12px' }}>Date: {new Date(order.created_at).toLocaleDateString()}</p>
                       <p style={{ margin: '5px 0 0 0', color: '#0f172a', fontSize: '12px', fontWeight: 'bold' }}>📍 Pickup: <span style={{ fontWeight: 'normal', color: '#475569' }}>{order.location}</span></p>
+ <a 
+  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.location)}`} 
+  target="_blank" 
+  rel="noopener noreferrer"
+  style={{ display: 'inline-block', marginTop: '8px', padding: '6px 12px', backgroundColor: '#3b82f6', color: 'white', borderRadius: '4px', textDecoration: 'none', fontSize: '12px', fontWeight: 'bold' }}
+>
+  🗺️ Get Directions
+</a>
                       {order.appointment_time && <p style={{ margin: '5px 0 0 0', color: '#166534', fontSize: '12px', fontWeight: 'bold' }}>📅 Scheduled: {formatApptDate(order.appointment_time)}</p>}
                       <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }} className="hide-on-print">
                          {order.grower_w9 && <a href={fixImageUrl(order.grower_w9)} target="_blank" rel="noreferrer" className="btn-secondary" style={{ fontSize: '11px', padding: '4px 8px', border: '1px solid #cbd5e1' }}>📄 View Grower W-9</a>}
