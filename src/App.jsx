@@ -1280,12 +1280,16 @@ const handleConnectBank = async () => {
 </div>
 
 {/* --- NEW SPECS ROW FOR BUYERS --- */}
-<div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#cbd5e1', marginBottom: '12px', flexWrap: 'wrap' }}>
-  {pallet.size && <span style={{ background: '#0284c7', color: 'white', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>Size: {pallet.size}</span>}
-  {pallet.weight && <span style={{ background: '#334155', padding: '3px 8px', borderRadius: '4px' }}>{pallet.weight}</span>}
-  {pallet.pack_style && <span style={{ background: '#334155', padding: '3px 8px', borderRadius: '4px' }}>{pallet.pack_style}</span>}
-</div>
-{/* -------------------------------- */}
+                    <div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#cbd5e1', marginBottom: '12px', flexWrap: 'wrap' }}>
+                      {pallet.size && <span style={{ background: '#0284c7', color: 'white', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>Size: {pallet.size}</span>}
+                      
+                      {pallet.weight && <span style={{ background: '#334155', padding: '3px 8px', borderRadius: '4px' }}>
+                        {String(pallet.weight).toLowerCase().includes('lb') ? pallet.weight : `${pallet.weight} lbs`}
+                      </span>}
+                      
+                      {pallet.pack_style && <span style={{ background: '#334155', padding: '3px 8px', borderRadius: '4px' }}>{pallet.pack_style}</span>}
+                    </div>
+                    {/* -------------------------------- */}
 
 <p style={{ margin: '0 0 15px 0', color: '#e2e8f0', fontSize: '15px', fontWeight: 'bold' }}>
   {pallet.pallets_available} Pallet(s) Available <span style={{ color: '#94a3b8', fontSize: '13px', fontWeight: 'normal' }}>({pallet.boxes_per_pallet} boxes/pallet)</span>
