@@ -1275,13 +1275,21 @@ const handleConnectBank = async () => {
                       {pallet.commodity_type} {pallet.variety && `- ${pallet.variety}`}
                       {pallet.grade && <span style={{ fontSize: '10px', background: '#1e293b', border: '1px solid #334155', padding: '2px 6px', borderRadius: '4px', verticalAlign: 'middle', marginLeft: '8px', fontWeight: '600', color: '#cbd5e1' }}>Grade: {pallet.grade}</span>}
                     </h2>
-                    <div style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
-                      🏢 HT Verified Grower <span style={{ background: '#dcfce3', color: '#166534', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>✓ CERT: {pallet.cert_type ? pallet.cert_type.toUpperCase() : 'DOCS'}</span>
-                    </div>
-                    
-                    <p style={{ margin: '0 0 15px 0', color: '#e2e8f0', fontSize: '15px', fontWeight: 'bold' }}>
-                      {pallet.pallets_available} Pallet(s) Available <span style={{ color: '#94a3b8', fontSize: '13px', fontWeight: 'normal' }}>({pallet.boxes_per_pallet} boxes/pallet)</span>
-                    </p>
+<div style={{ color: '#0ea5e9', fontSize: '13px', fontWeight: 'bold', marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap' }}>
+  🏢 HT Verified Grower <span style={{ background: '#dcfce3', color: '#166534', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: '900', letterSpacing: '0.5px' }}>✓ CERT: {pallet.cert_type ? pallet.cert_type.toUpperCase() : 'DOCS'}</span>
+</div>
+
+{/* --- NEW SPECS ROW FOR BUYERS --- */}
+<div style={{ display: 'flex', gap: '8px', fontSize: '12px', color: '#cbd5e1', marginBottom: '12px', flexWrap: 'wrap' }}>
+  {pallet.size && <span style={{ background: '#0284c7', color: 'white', padding: '3px 8px', borderRadius: '4px', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.2)' }}>Size: {pallet.size}</span>}
+  {pallet.weight && <span style={{ background: '#334155', padding: '3px 8px', borderRadius: '4px' }}>{pallet.weight}</span>}
+  {pallet.pack_style && <span style={{ background: '#334155', padding: '3px 8px', borderRadius: '4px' }}>{pallet.pack_style}</span>}
+</div>
+{/* -------------------------------- */}
+
+<p style={{ margin: '0 0 15px 0', color: '#e2e8f0', fontSize: '15px', fontWeight: 'bold' }}>
+  {pallet.pallets_available} Pallet(s) Available <span style={{ color: '#94a3b8', fontSize: '13px', fontWeight: 'normal' }}>({pallet.boxes_per_pallet} boxes/pallet)</span>
+</p>
                     
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '5px', marginBottom: '15px', color: '#cbd5e1', fontSize: '13px', lineHeight: '1.4' }}>
                       <span style={{ color: '#ef4444' }}>📍</span>
